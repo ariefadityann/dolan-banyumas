@@ -1,0 +1,302 @@
+[
+  {
+    "nama": "Desa Ketenger",
+    "kategori": "Desa Wisata",
+    "deskripsi": "Desa Wisata",
+    "caption": "Desa Wisata Ketenger merupakan sebuah desa wisata yang terletak di kaki Gunung Slamet...",
+    "jarak": "300M",
+    "harga": "5.000",
+    "rating": 4.5,
+    "gambarUrl": "assets/img/desa_ketenger.jpg",
+    "images": [
+      "assets/img/desa_ketenger1.jpg",
+      "assets/img/desa_ketenger2.jpg",
+      "assets/img/desa_ketenger3.jpg"
+    ],
+    "alamat": "Ketenger, Baturraden, Banyumas, Jawa Tengah",
+    "telepon": "081234567890",
+    "jamBuka": "08:00 - 17:00",
+    "lat": -7.3236,
+    "lng": 109.2295
+  },
+  {
+    "nama": "Curug Gomblang",
+    "kategori": "Wisata",
+    "deskripsi": "Wisata Alam",
+    "caption": "Curug Gomblang adalah sebuah air terjun yang terletak di kawasan hutan lindung...",
+    "jarak": "8KM",
+    "harga": "5.000",
+    "rating": 4.7,
+    "gambarUrl": "assets/img/curug_gomblang.jpg",
+    "images": [
+      "assets/img/curug_gomblang1.jpg",
+      "assets/img/curug_gomblang2.jpg",
+      "assets/img/curug_gomblang3.jpg"
+    ],
+    "alamat": "Desa Kalisalak, Kecamatan Kedungbanteng, Banyumas, Jawa Tengah",
+    "telepon": "081122334455",
+    "jamBuka": "07:00 - 16:00",
+    "lat": -7.3289,
+    "lng": 109.1462
+  },
+  {
+    "nama": "Alun Alun Banyumas",
+    "kategori": "Wisata",
+    "deskripsi": "Wisata Buatan",
+    "caption": "Alun Alun Banyumas merupakan sebuah taman kota yang terletak di pusat Kota Banyumas...",
+    "jarak": "20KM",
+    "harga": "Gratis",
+    "rating": 4.6,
+    "gambarUrl": "assets/img/alunalun.jpg",
+    "images": [
+      "assets/img/alunalun1.jpg",
+      "assets/img/alunalun2.jpg",
+      "assets/img/alunalun3.jpg"
+    ],
+    "alamat": "Jl. Jaya Sirayu, Mruyung, Sudagaran, Kec. Banyumas, Kabupaten Banyumas, Jawa Tengah 53192",
+    "telepon": "N/A",
+    "jamBuka": "24 Jam",
+    "lat": -7.5251,
+    "lng": 109.2924
+  },
+  {
+    "nama": "Gor Satria",
+    "kategori": "Wisata",
+    "deskripsi": "Wisata Buatan",
+    "caption": "GOR Satria Purwokerto adalah gelanggang olahraga utama di Purwokerto...",
+    "jarak": "20KM",
+    "harga": "Gratis",
+    "rating": 4.5,
+    "gambarUrl": "assets/img/Wisata/Gor/Gs1.jpg",
+    "images": [
+      "assets/img/Wisata/Gor/Gs2.jpg",
+      "assets/img/Wisata/Gor/Gs3.jpg",
+      "assets/img/Wisata/Gor/Gs4.jpg"
+    ],
+    "alamat": "Jl. Prof. Dr. Suharso No.8, Mangunjaya, Purwokerto Lor, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53113",
+    "telepon": "082226677776",
+    "jamBuka": "08.00-17.00",
+    "lat": -7.4160,
+    "lng": 109.2506
+  },
+  {
+    "nama": "Desa Melung",
+    "kategori": "Desa Wisata",
+    "deskripsi": "Desa Wisata",
+    "caption": "Desa Wisata Melung terletak di Kec. Kedungbanteng yang berbatasan langsung dengan Kec.Baturraden, Kab. Banyumas...",
+    "jarak": "20KM",
+    "harga": "Gratis",
+    "rating": 4.5,
+    "gambarUrl": "assets/img/Desa_Wisata/Desa_Melung/Dm1.jpg",
+    "images": [
+      "assets/img/Desa_Wisata/Desa_Melung/Dm2.jpg",
+      "assets/img/Desa_Wisata/Desa_Melung/Dm3.jpg",
+      "assets/img/Desa_Wisata/Desa_Melung/Dm4.jpg"
+    ],
+    "alamat": "Pasar Melung Lesehan 76, JL Desa Melung, Melung, Kedungbanteng, Dusun III, Melung, Kec. Kedungbanteng, Kabupaten Banyumas, Jawa Tengah 53152, Indonesia, Melung, Kedung Banteng",
+    "telepon": "085647596546",
+    "jamBuka": "24 Jam",
+    "lat": -7.2926,
+    "lng": 109.2029
+  },
+  {
+    "nama": "Desa Kali Salak",
+    "kategori": "Desa Wisata",
+    "deskripsi": "Desa Wisata",
+    "caption": "Kalisalak adalah desa yang memiliki lima pedukuhan, Kalisalak pada masa kolonial menjadi kantor kawedanan...",
+    "jarak": "20KM",
+    "harga": "Gratis",
+    "rating": 4.5,
+    "gambarUrl": "assets/img/Desa_Wisata/Desa_Kali_Salak/Dks1.jpg",
+    "images": [
+      "assets/img/Desa_Wisata/Desa_Kali_Salak/Dks2.jpg",
+      "assets/img/Desa_Wisata/Desa_Kali_Salak/Dks3.jpg",
+      "assets/img/Desa_Wisata/Desa_Kali_Salak/Dks4.jpg"
+    ],
+    "alamat": "Jl. Karangbanar, Area Sawah/Kebun, Kalisalak, Kec. Kebasen, Kabupaten Banyumas, Jawa Tengah 53172, Indonesia, Kalisalak, Kebasen",
+    "telepon": "08112735099",
+    "jamBuka": "24 Jam",
+    "lat": -7.5386,
+    "lng": 109.2267
+  },
+  {
+    "nama": "Kuro Coffeeeatery",
+    "kategori": "Kuliner",
+    "deskripsi": "Kafe",
+    "caption": "Kuro Coffee Eatery Purwokerto adalah kafe bernuansa Jepang dengan suasana nyaman, tersedia area indoor dan outdoor yang asri...",
+    "jarak": "20KM",
+    "harga": "25.000",
+    "rating": 4.8,
+    "gambarUrl": "assets/img/Kuliner/Kuro_Coffee/k1.jpg",
+    "images": [
+      "assets/img/Kuliner/Kuro_Coffee/k2.jpg",
+      "assets/img/Kuliner/Kuro_Coffee/k3.jpg",
+      "assets/img/Kuliner/Kuro_Coffee/k4.jpg"
+    ],
+    "alamat": "Jl. Gelora Indah I No.18, Mangunjaya, Purwokerto Lor, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53113",
+    "telepon": "0896-7332-3596",
+    "jamBuka": "09.00 - 24.00",
+    "lat": -7.4194,
+    "lng": 109.2514
+  },
+  {
+    "nama": "Alas House",
+    "kategori": "Kuliner",
+    "deskripsi": "Kafe",
+    "caption": "Alas House, Purwokerto — kafe estetik & cozy dengan tema minimalis dominan warna pastel, memiliki area indoor, outdoor, dan rooftop...",
+    "jarak": "20KM",
+    "harga": "25.000",
+    "rating": 4.6,
+    "gambarUrl": "assets/img/Kuliner/Alas_House/Ah1.jpg",
+    "images": [
+      "assets/img/Kuliner/Alas_House/Ah2.jpg",
+      "assets/img/Kuliner/Alas_House/Ah3.jpg",
+      "assets/img/Kuliner/Alas_House/Ah4.jpg"
+    ],
+    "alamat": " Jl. Gelora Indah I No.36, Mangunjaya, Purwokerto Lor, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53114",
+    "telepon": "0822-4246-3875",
+    "jamBuka": "09.00 - 01.00",
+    "lat": -7.4207,
+    "lng": 109.2513
+  },
+  {
+    "nama": "Hotways Chicken",
+    "kategori": "Kuliner",
+    "deskripsi": "Resto",
+    "caption": "Hotways Chicken Purwokerto adalah resto ayam goreng krispi ala Nashville dengan cita rasa pedas khas. Menyajikan pilihan menu crispy, spicy...",
+    "jarak": "20KM",
+    "harga": "25.000",
+    "rating": 4.3,
+    "gambarUrl": "assets/img/Kuliner/Hotways/h1.jpg",
+    "images": [
+      "assets/img/Kuliner/Hotways/h2.jpg",
+      "assets/img/Kuliner/Hotways/h3.jpg",
+      "assets/img/Kuliner/Hotways/h4.jpg"
+    ],
+    "alamat": " Jl. Gelora Indah I, Arcawinangun, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53113",
+    "telepon": "0823-1433-8889",
+    "jamBuka": "09.00 - 01.00",
+    "lat": -7.4207,
+    "lng": 109.2513
+  },
+  {
+    "nama": "Batik Hadipriyanto Banyumas",
+    "kategori": "Oleh Oleh",
+    "deskripsi": "Pakaian",
+    "caption": "Batik Hadipriyanto Banyumas adalah galeri batik legendaris sejak 1957 yang melestarikan motif khas Banyumasan. Menawarkan batik tulis...",
+    "jarak": "20KM",
+    "harga": "15.000",
+    "rating": 4.3,
+    "gambarUrl": "assets/img/Oleh_Oleh/Batik_Hadipriyanto/Bh1.jpg",
+    "images": [
+      "assets/img/Oleh_Oleh/Batik_Hadipriyanto/Bh2.jpg",
+      "assets/img/Oleh_Oleh/Batik_Hadipriyanto/Bh3.jpg",
+      "assets/img/Oleh_Oleh/Batik_Hadipriyanto/Bh4.jpg"
+    ],
+    "alamat": " F7PW+W26, Jl. Mruyung, Banyumas, Sudagaran, Kec. Banyumas, Kabupaten Banyumas, Jawa Tengah 53192",
+    "telepon": "0821-3689-6800",
+    "jamBuka": "10.00 - 19.00",
+    "lat": -7.4259,
+    "lng": 109.2487
+  },
+  {
+    "nama": "Gethuk Goreng",
+    "kategori": "Oleh Oleh",
+    "deskripsi": "Makanan",
+    "caption": "Getuk Goreng Bu Diyem adalah penyaji khas camilan tradisional Banyumasan berupa getuk yang digoreng manis...",
+    "jarak": "20KM",
+    "harga": "25.000",
+    "rating": 4.8,
+    "gambarUrl": "assets/img/Oleh_Oleh/Gethuk_Bu_Diyem/Gbd1.jpg",
+    "images": [
+      "assets/img/Oleh_Oleh/Gethuk_Bu_Diyem/Gbd2.jpg",
+      "assets/img/Oleh_Oleh/Gethuk_Bu_Diyem/Gbd3.jpg",
+      "assets/img/Oleh_Oleh/Gethuk_Bu_Diyem/Gbd4.jpg"
+    ],
+    "alamat": " Jl. Raya Banjarnegara - Purwokerto No.Road, Dusun I, Sokaraja Kulon, Kec. Sokaraja, Kabupaten Banyumas, Jawa Tengah 53181",
+    "telepon": "085747784632",
+    "jamBuka": "07.00 - 21.00",
+    "lat": -7.4576,
+    "lng": 109.2879
+  },
+  {
+    "nama": "Soto Lama Bpk. Sukardi",
+    "kategori": "Oleh Oleh",
+    "deskripsi": "Makanan",
+    "caption": "Soto Lama H. Suradi Sokaraja adalah kuliner legendaris sejak 1978, terkenal dengan kuah gurih dan sambal kacang khas. Menyajikan soto daging...",
+    "jarak": "20KM",
+    "harga": "25.000",
+    "rating": 4.4,
+    "gambarUrl": "assets/img/Oleh_Oleh/Soto_lama_H_Suradi/Slhs1.jpg",
+    "images": [
+      "assets/img/Oleh_Oleh/Soto_lama_H_Suradi/Slhs2.jpg",
+      "assets/img/Oleh_Oleh/Soto_lama_H_Suradi/Slhs3.jpg",
+      "assets/img/Oleh_Oleh/Soto_lama_H_Suradi/Slhs4.jpg"
+    ],
+    "alamat": " Jl. Jend. Sudirman No.71, Dusun I Sokaraja Tengah, Sokaraja Tengah, Kec. Sokaraja, Kabupaten Banyumas, Jawa Tengah 53181",
+    "telepon": "0812-2683-7272",
+    "jamBuka": "09.00 - 21.00",
+    "lat": -7.4576,
+    "lng": 109.2952
+  },
+  {
+    "nama": "Hotel ASTON Purwokerto",
+    "kategori": "Penginapan",
+    "deskripsi": "Hotel",
+    "caption": "Hotel Aston Purwokerto adalah hotel bintang 4 di pusat kota dengan kamar modern, kolam renang, spa, gym, restoran, dan ballroom luas...",
+    "jarak": "20KM",
+    "harga": "727.456",
+    "rating": 4.6,
+    "gambarUrl": "assets/img/Penginapan/Aston/Aston1.jpg",
+    "images": [
+      "assets/img/Penginapan/Aston/Aston2.jpg",
+      "assets/img/Penginapan/Aston/Aston3.jpg",
+      "assets/img/Penginapan/Aston/Aston4.jpg"
+    ],
+    "alamat": " Jl. Overste Isdiman No.33, Glempang, Bancarkembar, Kec. Purwokerto Utara, Kabupaten Banyumas, Jawa Tengah 53114",
+    "telepon": "(0281) 628000",
+    "jamBuka": "24 Jam",
+    "lat": -7.4173,
+    "lng": 109.2449
+  },
+  {
+    "nama": "Hotel Java Heritage",
+    "kategori": "Penginapan",
+    "deskripsi": "Hotel",
+    "caption": "Java Heritage Hotel Purwokerto adalah hotel bintang 4 modern yang berada di pusat kota, dilengkapi 169 kamar mulai dari deluxe hingga suite dan cottage...",
+    "jarak": "20KM",
+    "harga": "932.556",
+    "rating": 4.6,
+    "gambarUrl": "assets/img/Penginapan/Java_Heritage/JV1.jpg",
+    "images": [
+      "assets/img/Penginapan/Java_Heritage/JV2.jpg",
+      "assets/img/Penginapan/Java_Heritage/JV3.jpg",
+      "assets/img/Penginapan/Java_Heritage/JV4.jpg"
+    ],
+    "alamat": " Jl. Dr. Angka No.71, Karangkobar, Sokanegara, Kec. Purwokerto Tim., Kabupaten Banyumas, Jawa Tengah 53115",
+    "telepon": "(0281) 634321",
+    "jamBuka": "24 Jam",
+    "lat": -7.4156,
+    "lng": 109.2387
+  },
+  {
+    "nama": "Hotel Surya Yudha Purwokerto",
+    "kategori": "Penginapan",
+    "deskripsi": "Hotel",
+    "caption": "Hotel Surya Yudha Purwokerto adalah hotel bintang 3 dengan fasilitas kolam renang, restoran, ruang meeting, dan layanan lengkap...",
+    "jarak": "20KM",
+    "harga": "363.580",
+    "rating": 4.4,
+    "gambarUrl": "assets/img/Penginapan/Surya_Yuda/SY1.jpg",
+    "images": [
+      "assets/img/Penginapan/Surya_Yuda/SY2.jpg",
+      "assets/img/Penginapan/Surya_Yuda/SY3.jpg",
+      "assets/img/Penginapan/Surya_Yuda/SY4.jpg"
+    ],
+    "alamat": " Jl. Gerilya Barat Tj. No.30A, Gandasuli, Karangpucung, Kec. Purwokerto Sel., Kabupaten Banyumas, Jawa Tengah 53142",
+    "telepon": "(0281) 6578080",
+    "jamBuka": "24 Jam",
+    "lat": -7.4407,
+    "lng": 109.2379
+  }
+]
