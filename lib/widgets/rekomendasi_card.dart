@@ -69,7 +69,6 @@ class RekomendasiCard extends StatelessWidget {
                                 Text(
                                   wisata.nama,
                                   style: const TextStyle(
-                                      color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18),
                                   maxLines: 1,
@@ -77,8 +76,7 @@ class RekomendasiCard extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  wisata
-                                      .deskripsi, // Menggunakan caption/deskripsi
+                                  wisata.caption, // Menggunakan caption/deskripsi
                                   style: TextStyle(
                                       color: Colors.grey[600], fontSize: 12),
                                   maxLines: 2,
@@ -86,7 +84,6 @@ class RekomendasiCard extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 5),
                             Row(
                               children: [
                                 SvgPicture.asset(
@@ -94,38 +91,26 @@ class RekomendasiCard extends StatelessWidget {
                                   width: 16,
                                   height: 16,
                                   colorFilter: const ColorFilter.mode(
-                                      Colors.green, BlendMode.srcIn),
+                                      Colors.black, BlendMode.srcIn),
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
                                   'Rp ${wisata.harga}',
                                   style: const TextStyle(
-                                      color: Colors.black,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 4),
                             Row(
                               children: [
                                 const Icon(Icons.location_on_outlined,
-                                    color: Colors.green, size: 14),
+                                    color: Colors.black, size: 14),
                                 const SizedBox(width: 4),
                                 Text(wisata.jarak,
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 12)),
+                                    style: const TextStyle(fontSize: 12)),
                                 const SizedBox(width: 12),
-                                const Icon(Icons.star,
-                                    color: Colors.amber, size: 16),
                                 const SizedBox(width: 4),
-                                Text(
-                                  wisata.rating.toString(),
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
-                                ),
                               ],
                             ),
                             Row(
@@ -135,7 +120,7 @@ class RekomendasiCard extends StatelessWidget {
                                   'Lihat Selengkapnya',
                                   style: TextStyle(
                                       fontSize: 12,
-                                      color: Colors.green,
+                                      color: Colors.black,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 // --- ICONBUTTON DIPERBARUI DI SINI ---
@@ -203,3 +188,4 @@ class RekomendasiCard extends StatelessWidget {
     );
   }
 }
+

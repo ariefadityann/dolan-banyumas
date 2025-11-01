@@ -8,7 +8,6 @@ class TempatWisata {
   final String caption;
   String jarak;
   final String harga;
-  final double rating;
   final String gambarUrl;
   final List<String> images;
   final String alamat;
@@ -27,7 +26,6 @@ class TempatWisata {
     required this.caption,
     required this.jarak,
     required this.harga,
-    required this.rating,
     required this.gambarUrl,
     required this.images,
     required this.alamat,
@@ -46,7 +44,6 @@ class TempatWisata {
       caption: json['caption'] ?? '',
       jarak: json['jarak'] ?? '',
       harga: json['harga'] ?? '0',
-      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
       gambarUrl: json['gambarUrl'] ?? '',
       images: json['images'] != null ? List<String>.from(json['images']) : [],
       alamat: json['alamat'] ?? '',
@@ -66,7 +63,6 @@ class TempatWisata {
       'caption': caption,
       'jarak': jarak,
       'harga': harga,
-      'rating': rating,
       'gambarUrl': gambarUrl,
       'images': images,
       'alamat': alamat,

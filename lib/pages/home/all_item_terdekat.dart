@@ -278,22 +278,6 @@ class _AllItemTerdekatState extends State<AllItemTerdekat> {
                           ],
                         ),
                         SizedBox(height: screenHeight * 0.008),
-                        Row(
-                          children: [
-                            Icon(Icons.star,
-                                size: screenWidth * 0.047,
-                                color: Colors.amber[600]),
-                            SizedBox(width: screenWidth * 0.01),
-                            Text(
-                              place.rating.toStringAsFixed(1),
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: screenWidth * 0.035,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                   ),

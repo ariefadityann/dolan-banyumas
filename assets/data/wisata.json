@@ -6,7 +6,6 @@
     "caption": "Desa Wisata Ketenger merupakan sebuah desa wisata yang terletak di kaki Gunung Slamet...",
     "jarak": "300M",
     "harga": "5.000",
-    "rating": 4.5,
     "gambarUrl": "assets/img/desa_ketenger.jpg",
     "images": [
       "assets/img/desa_ketenger1.jpg",
@@ -26,7 +25,6 @@
     "caption": "Curug Gomblang adalah sebuah air terjun yang terletak di kawasan hutan lindung...",
     "jarak": "8KM",
     "harga": "5.000",
-    "rating": 4.7,
     "gambarUrl": "assets/img/curug_gomblang.jpg",
     "images": [
       "assets/img/curug_gomblang1.jpg",
@@ -46,7 +44,6 @@
     "caption": "Alun Alun Banyumas merupakan sebuah taman kota yang terletak di pusat Kota Banyumas...",
     "jarak": "20KM",
     "harga": "Gratis",
-    "rating": 4.6,
     "gambarUrl": "assets/img/alunalun.jpg",
     "images": [
       "assets/img/alunalun1.jpg",
@@ -66,7 +63,6 @@
     "caption": "GOR Satria Purwokerto adalah gelanggang olahraga utama di Purwokerto...",
     "jarak": "20KM",
     "harga": "Gratis",
-    "rating": 4.5,
     "gambarUrl": "assets/img/Wisata/Gor/Gs1.jpg",
     "images": [
       "assets/img/Wisata/Gor/Gs2.jpg",
@@ -86,7 +82,6 @@
     "caption": "Desa Wisata Melung terletak di Kec. Kedungbanteng yang berbatasan langsung dengan Kec.Baturraden, Kab. Banyumas...",
     "jarak": "20KM",
     "harga": "Gratis",
-    "rating": 4.5,
     "gambarUrl": "assets/img/Desa_Wisata/Desa_Melung/Dm1.jpg",
     "images": [
       "assets/img/Desa_Wisata/Desa_Melung/Dm2.jpg",
@@ -106,7 +101,6 @@
     "caption": "Kalisalak adalah desa yang memiliki lima pedukuhan, Kalisalak pada masa kolonial menjadi kantor kawedanan...",
     "jarak": "20KM",
     "harga": "Gratis",
-    "rating": 4.5,
     "gambarUrl": "assets/img/Desa_Wisata/Desa_Kali_Salak/Dks1.jpg",
     "images": [
       "assets/img/Desa_Wisata/Desa_Kali_Salak/Dks2.jpg",
@@ -126,7 +120,6 @@
     "caption": "Kuro Coffee Eatery Purwokerto adalah kafe bernuansa Jepang dengan suasana nyaman, tersedia area indoor dan outdoor yang asri...",
     "jarak": "20KM",
     "harga": "25.000",
-    "rating": 4.8,
     "gambarUrl": "assets/img/Kuliner/Kuro_Coffee/k1.jpg",
     "images": [
       "assets/img/Kuliner/Kuro_Coffee/k2.jpg",
@@ -146,7 +139,6 @@
     "caption": "Alas House, Purwokerto — kafe estetik & cozy dengan tema minimalis dominan warna pastel, memiliki area indoor, outdoor, dan rooftop...",
     "jarak": "20KM",
     "harga": "25.000",
-    "rating": 4.6,
     "gambarUrl": "assets/img/Kuliner/Alas_House/Ah1.jpg",
     "images": [
       "assets/img/Kuliner/Alas_House/Ah2.jpg",
@@ -166,7 +158,6 @@
     "caption": "Hotways Chicken Purwokerto adalah resto ayam goreng krispi ala Nashville dengan cita rasa pedas khas. Menyajikan pilihan menu crispy, spicy...",
     "jarak": "20KM",
     "harga": "25.000",
-    "rating": 4.3,
     "gambarUrl": "assets/img/Kuliner/Hotways/h1.jpg",
     "images": [
       "assets/img/Kuliner/Hotways/h2.jpg",
@@ -186,7 +177,6 @@
     "caption": "Batik Hadipriyanto Banyumas adalah galeri batik legendaris sejak 1957 yang melestarikan motif khas Banyumasan. Menawarkan batik tulis...",
     "jarak": "20KM",
     "harga": "15.000",
-    "rating": 4.3,
     "gambarUrl": "assets/img/Oleh_Oleh/Batik_Hadipriyanto/Bh1.jpg",
     "images": [
       "assets/img/Oleh_Oleh/Batik_Hadipriyanto/Bh2.jpg",
@@ -206,7 +196,6 @@
     "caption": "Getuk Goreng Bu Diyem adalah penyaji khas camilan tradisional Banyumasan berupa getuk yang digoreng manis...",
     "jarak": "20KM",
     "harga": "25.000",
-    "rating": 4.8,
     "gambarUrl": "assets/img/Oleh_Oleh/Gethuk_Bu_Diyem/Gbd1.jpg",
     "images": [
       "assets/img/Oleh_Oleh/Gethuk_Bu_Diyem/Gbd2.jpg",
@@ -226,7 +215,6 @@
     "caption": "Soto Lama H. Suradi Sokaraja adalah kuliner legendaris sejak 1978, terkenal dengan kuah gurih dan sambal kacang khas. Menyajikan soto daging...",
     "jarak": "20KM",
     "harga": "25.000",
-    "rating": 4.4,
     "gambarUrl": "assets/img/Oleh_Oleh/Soto_lama_H_Suradi/Slhs1.jpg",
     "images": [
       "assets/img/Oleh_Oleh/Soto_lama_H_Suradi/Slhs2.jpg",
@@ -246,7 +234,6 @@
     "caption": "Hotel Aston Purwokerto adalah hotel bintang 4 di pusat kota dengan kamar modern, kolam renang, spa, gym, restoran, dan ballroom luas...",
     "jarak": "20KM",
     "harga": "727.456",
-    "rating": 4.6,
     "gambarUrl": "assets/img/Penginapan/Aston/Aston1.jpg",
     "images": [
       "assets/img/Penginapan/Aston/Aston2.jpg",
@@ -266,7 +253,6 @@
     "caption": "Java Heritage Hotel Purwokerto adalah hotel bintang 4 modern yang berada di pusat kota, dilengkapi 169 kamar mulai dari deluxe hingga suite dan cottage...",
     "jarak": "20KM",
     "harga": "932.556",
-    "rating": 4.6,
     "gambarUrl": "assets/img/Penginapan/Java_Heritage/JV1.jpg",
     "images": [
       "assets/img/Penginapan/Java_Heritage/JV2.jpg",
@@ -286,7 +272,6 @@
     "caption": "Hotel Surya Yudha Purwokerto adalah hotel bintang 3 dengan fasilitas kolam renang, restoran, ruang meeting, dan layanan lengkap...",
     "jarak": "20KM",
     "harga": "363.580",
-    "rating": 4.4,
     "gambarUrl": "assets/img/Penginapan/Surya_Yuda/SY1.jpg",
     "images": [
       "assets/img/Penginapan/Surya_Yuda/SY2.jpg",

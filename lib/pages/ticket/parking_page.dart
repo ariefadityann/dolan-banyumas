@@ -16,7 +16,6 @@ class ParkingPage extends StatelessWidget {
         deskripsi: 'parkir',
         harga: '1.000',
         gambarUrl: 'assets/img/alunalun.jpg',
-        rating: 0,
         // --- TAMBAHAN: Parameter wajib yang harus diisi ---
         kategori: 'Parkir',
         caption: 'Area Parkir Resmi Roda 2',
@@ -36,7 +35,6 @@ class ParkingPage extends StatelessWidget {
         deskripsi: 'parkir',
         harga: '2.000',
         gambarUrl: 'assets/img/alunalun.jpg',
-        rating: 0,
         // --- TAMBAHAN: Parameter wajib yang harus diisi ---
         kategori: 'Parkir',
         caption: 'Area Parkir Resmi Roda 4',
@@ -54,7 +52,6 @@ class ParkingPage extends StatelessWidget {
         deskripsi: 'parkir',
         harga: '5.000',
         gambarUrl: 'assets/img/alunalun.jpg',
-        rating: 0,
         // --- TAMBAHAN: Parameter wajib yang harus diisi ---
         kategori: 'Parkir',
         caption: 'Area Parkir Resmi Roda 4',

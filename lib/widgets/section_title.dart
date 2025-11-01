@@ -30,7 +30,7 @@ class SectionTitle extends StatelessWidget {
             onPressed: onPressed,
             child: const Text(
               'Lihat Semua',
-              style: TextStyle(fontSize: 14, color: Colors.green),
+              style: TextStyle(fontSize: 14, color: Colors.red),
             ),
           ),
         ],

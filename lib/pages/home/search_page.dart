@@ -212,7 +212,7 @@ class _SearchPageState extends State<SearchPage> {
                 Container(
                   width: 65, height: 65,
                   decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFFFF9B50) : Colors.grey.shade100,
+                    color: isSelected ? const Color(0xFFF44336) : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: Icon(category.icon, color: isSelected ? Colors.white : Colors.grey.shade700, size: 32),
@@ -293,8 +293,6 @@ class SearchResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double rating = wisata.rating;
-    final String ratingText = rating >= 4.5 ? 'Greate' : 'Good';
 
     return InkWell(
       onTap: () => onCardTap(wisata),
@@ -331,24 +329,7 @@ class SearchResultCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-              decoration: BoxDecoration(color: const Color(0xFFF1F1F1).withOpacity(0.5), borderRadius: BorderRadius.circular(12)),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text(rating.toStringAsFixed(1), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                      const SizedBox(width: 4),
-                      const Icon(Icons.star_rounded, color: Colors.amber, size: 20),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(ratingText, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
-                ],
-              ),
-            )
+            // Widget Container untuk rating telah dihapus dari sini
           ],
         ),
       ),

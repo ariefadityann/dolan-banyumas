@@ -31,7 +31,7 @@ class KategoriFilter extends StatelessWidget {
               margin: const EdgeInsets.only(right: 10),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF425C48) : Colors.white,
+                color: isSelected ? const Color(0xFFF44336) : Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.grey.shade300),
               ),
