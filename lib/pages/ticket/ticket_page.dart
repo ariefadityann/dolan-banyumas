@@ -20,7 +20,7 @@ class TicketPage extends StatefulWidget {
 
 class _TicketPageState extends State<TicketPage> {
   // Constants
-  static const _backgroundColor = Color(0xFF425C48);
+  static const _backgroundColor = Color(0xFFF44336);
   static const _surfaceColor = Color(0xFFF9F8F5);
   static const _primaryColor = Color(0xFF425C48);
   static const _accentColor = Color(0xFFE3F0E3);
@@ -49,15 +49,20 @@ class _TicketPageState extends State<TicketPage> {
   }
 
   void _filterDataForPage() {
+    // Filter ini tetap sama
     _ticketableWisata = widget.allWisata.where((wisata) {
       return wisata.deskripsi.toLowerCase() == 'wisata alam';
     }).toList();
 
+    // --- PERUBAHAN DI SINI ---
+    // Logika rating telah dihapus.
+    // Sekarang, 'populer' berarti semua 'wisata alam'.
     _popularWisata = widget.allWisata.where((wisata) {
-      final bool isPopular = wisata.rating >= 4.0;
+      // final bool isPopular = wisata.rating >= 4.0; // <-- BARIS INI DIHAPUS
       final bool isWisataAlam = wisata.deskripsi.toLowerCase() == 'wisata alam';
-      return isPopular && isWisataAlam;
+      return isWisataAlam; // <-- HANYA MENGEMBALIKAN 'isWisataAlam'
     }).toList();
+    // --- AKHIR PERUBAHAN ---
 
     if (mounted) {
       setState(() {});
@@ -232,7 +237,7 @@ class _TicketPageState extends State<TicketPage> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? _accentColor : Colors.transparent,
+          color: isSelected ? const Color.fromARGB(255, 223, 99, 80) : Colors.transparent,
           borderRadius: BorderRadius.circular(_filterBorderRadius),
         ),
         // === PERUBAHAN DI SINI ===
@@ -242,7 +247,7 @@ class _TicketPageState extends State<TicketPage> {
             label,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: isSelected ? _primaryColor : Colors.grey[700],
+              color: isSelected ? const Color.fromARGB(255, 4, 4, 4) : Colors.grey[700],
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               fontSize: 14,
             ),

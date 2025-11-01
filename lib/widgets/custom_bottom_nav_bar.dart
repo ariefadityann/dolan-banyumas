@@ -37,7 +37,7 @@ class CustomBottomNavBar extends StatelessWidget {
     return Container(
       height: 80,
       decoration: BoxDecoration(
-        color: const Color(0xFF425C48),
+        color: const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -60,7 +60,7 @@ class CustomBottomNavBar extends StatelessWidget {
         height: 80,
         width: itemWidth,
         decoration: BoxDecoration(
-          color: const Color(0xFF425C48),
+          color: const Color.fromARGB(255, 255, 255, 255),
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
@@ -89,10 +89,10 @@ class CustomBottomNavBar extends StatelessWidget {
 
    Widget _buildNavItem(IconData icon, String label, int index, double itemWidth) {
     final bool isSelected = selectedIndex == index;
-    final Color backgroundColor = const Color(0xFF425C48);
+    final Color backgroundColor = const Color(0xFFF44336);
     final Color selectedIconColor = backgroundColor;
     final Color unselectedIconColor = Colors.grey[400]!;
-    final Color textColor = Colors.white; // TEKS PUTIH
+    final Color textColor = const Color(0xFFF44336); // TEKS PUTIH
 
     return Expanded(
       child: GestureDetector(

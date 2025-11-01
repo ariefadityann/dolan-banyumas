@@ -261,9 +261,9 @@ class _BookingPageState extends State<BookingPage> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: const Color(0xFFF0F7EB),
+            color: const Color.fromARGB(255, 255, 255, 255),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFE3F0E3)),
+            border: Border.all(color: const Color.fromARGB(255, 255, 255, 255)),
           ),
           child: Column(
             children: _ticketCounts.entries.map((entry) {

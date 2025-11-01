@@ -286,17 +286,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                             style: TextStyle(
                                 fontSize: 12, color: Colors.grey.shade600)),
                         const SizedBox(height: 3),
-                        Row(
-                          children: [
-                            Text(item.rating.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.orange)),
-                            const Icon(Icons.star,
-                                color: Colors.orange, size: 16),
-                            const SizedBox(height: 24),
-                          ],
-                        ),
+                        // --- ROW UNTUK RATING TELAH DIHAPUS DARI SINI ---
                       ],
                     ),
                     Text(

@@ -77,15 +77,6 @@ class TerdekatCard extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: const Color(0xFF425C48),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(Icons.arrow_forward_ios,
-                  color: Colors.white, size: 16),
-            ),
           ],
         ),
       ),

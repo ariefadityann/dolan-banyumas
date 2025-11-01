@@ -184,8 +184,6 @@ class _DetailWisataState extends State<DetailWisata> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildInfoItem(Icons.star, '${widget.wisata.rating}/5',
-                          Colors.amber, screenWidth),
                       _buildInfoItem(Icons.location_on, widget.wisata.jarak,
                           const Color(0xFF2D4A3E), screenWidth),
                       _buildPriceItem(screenWidth),
