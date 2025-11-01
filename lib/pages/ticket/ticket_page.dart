@@ -20,7 +20,7 @@ class TicketPage extends StatefulWidget {
 
 class _TicketPageState extends State<TicketPage> {
   // Constants
-  static const _backgroundColor = Color(0xFFF44336);
+  static const _backgroundColor = Color.fromARGB(255, 212, 72, 62);
   static const _surfaceColor = Color(0xFFF9F8F5);
   static const _primaryColor = Color(0xFF425C48);
   static const _accentColor = Color(0xFFE3F0E3);
