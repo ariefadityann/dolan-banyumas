@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dolan_banyumas/widgets/rekomendasi_card.dart'; // Sesuaikan path jika berbeda
+// import 'package:dolan_banyumas/widgets/rekomendasi_card.dart'; // Sesuaikan path jika berbeda
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latlong;
 import 'package:provider/provider.dart';
@@ -19,6 +19,7 @@ class DetailWisata extends StatefulWidget {
 
 class _DetailWisataState extends State<DetailWisata> {
   late String _currentMainImage;
+  int _selectedTabIndex = 0; // 0: Tentang, 1: Lokasi
 
   @override
   void initState() {
@@ -26,12 +27,13 @@ class _DetailWisataState extends State<DetailWisata> {
     _currentMainImage = widget.wisata.gambarUrl;
   }
 
-  // PERBAIKAN: Fungsi untuk membuka Google Maps dengan URL yang benar
   Future<void> _launchMapsUrl() async {
+    // 1. Ambil lat dan lng dari widget
     final lat = widget.wisata.lat;
     final lng = widget.wisata.lng;
 
-    // PERBAIKAN: Gunakan format URL yang benar dan universal untuk Google Maps
+    // 2. Buat URL Google Maps yang universal
+    // Ini akan mencari berdasarkan koordinat
     final Uri googleMapsUrl =
         Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng');
 
@@ -51,13 +53,10 @@ class _DetailWisataState extends State<DetailWisata> {
 
   @override
   Widget build(BuildContext context) {
-    // RESPONSIVE: Dapatkan ukuran layar
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
     final favoritesProvider = Provider.of<FavoritesProvider>(context);
     final isFavorited = favoritesProvider.isFavorite(widget.wisata);
-
     final List<String> allImages = [
       widget.wisata.gambarUrl,
       ...widget.wisata.images
@@ -68,7 +67,6 @@ class _DetailWisataState extends State<DetailWisata> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            // RESPONSIVE: Gunakan tinggi proporsional
             expandedHeight: screenHeight * 0.4,
             backgroundColor: const Color(0xFFF9F8F5),
             elevation: 0,
@@ -111,7 +109,6 @@ class _DetailWisataState extends State<DetailWisata> {
                     ),
                   ),
                   Positioned(
-                    // RESPONSIVE: Atur posisi galeri
                     bottom: 20,
                     left: screenWidth * 0.05,
                     right: screenWidth * 0.05,
@@ -154,7 +151,6 @@ class _DetailWisataState extends State<DetailWisata> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              // RESPONSIVE: Padding proporsional
               padding: EdgeInsets.all(screenWidth * 0.06),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +158,6 @@ class _DetailWisataState extends State<DetailWisata> {
                   Text(
                     widget.wisata.nama.toUpperCase(),
                     style: TextStyle(
-                      // RESPONSIVE: Ukuran font proporsional
                       fontSize: screenWidth * 0.07,
                       fontWeight: FontWeight.w900,
                       color: const Color(0xFF2D4A3E),
@@ -173,7 +168,6 @@ class _DetailWisataState extends State<DetailWisata> {
                   Text(
                     widget.wisata.kategori.toUpperCase(),
                     style: TextStyle(
-                      // RESPONSIVE: Ukuran font proporsional
                       fontSize: screenWidth * 0.04,
                       fontWeight: FontWeight.w600,
                       color: const Color(0xFF2D4A3E).withOpacity(0.7),
@@ -181,37 +175,15 @@ class _DetailWisataState extends State<DetailWisata> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  _buildTabSelector(screenWidth),
+                  const SizedBox(height: 32),
+                  IndexedStack(
+                    index: _selectedTabIndex,
                     children: [
-                      _buildInfoItem(Icons.location_on, widget.wisata.jarak,
-                          const Color(0xFF2D4A3E), screenWidth),
-                      _buildPriceItem(screenWidth),
+                      _buildTentangSection(screenWidth),
+                      _buildLocationSection(screenWidth),
                     ],
                   ),
-                  const SizedBox(height: 32),
-                  const Text(
-                    'Deskripsi',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF2D4A3E),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    widget.wisata.caption,
-                    style: TextStyle(
-                      // RESPONSIVE: Ukuran font proporsional
-                      fontSize: screenWidth * 0.035,
-                      color: const Color(0xFF666666).withOpacity(0.8),
-                      height: 1.5,
-                    ),
-                    textAlign: TextAlign.justify,
-                  ),
-                  const SizedBox(height: 32),
-                  _buildLocationSection(screenWidth),
-                  const SizedBox(height: 40),
                 ],
               ),
             ),
@@ -222,90 +194,71 @@ class _DetailWisataState extends State<DetailWisata> {
     );
   }
 
-  Widget _buildImageGallery(List<String> images, double screenWidth) {
-    // RESPONSIVE: Ukuran galeri proporsional
-    final galleryHeight = screenWidth * 0.2;
+  Widget _buildTabSelector(double screenWidth) {
     return Container(
-      height: galleryHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
+        color: Colors.grey[200],
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 15,
-            spreadRadius: 2,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: images.length,
-        itemBuilder: (context, index) {
-          final imagePath = images[index];
-          final bool isSelected = imagePath == _currentMainImage;
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                _currentMainImage = imagePath;
-              });
-            },
-            child: Container(
-              // RESPONSIVE: Ukuran thumbnail proporsional
-              width: galleryHeight - 16, // Kurangi padding vertikal
-              height: galleryHeight - 16,
-              margin: const EdgeInsets.symmetric(horizontal: 6.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(
-                  color:
-                      isSelected ? const Color(0xFF2D4A3E) : Colors.transparent,
-                  width: 3,
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.broken_image, color: Colors.grey),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildInfoItem(
-      IconData icon, String text, Color color, double screenWidth) {
-    return Container(
-      // RESPONSIVE: Padding proporsional
-      padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.03, vertical: screenWidth * 0.025),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.2), width: 1),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: color, size: screenWidth * 0.045),
-          SizedBox(width: screenWidth * 0.02),
-          Text(
-            text,
+          Expanded(child: _buildTabButton('Tentang', 0, screenWidth)),
+          Expanded(child: _buildTabButton('Lokasi', 1, screenWidth)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabButton(String title, int index, double screenWidth) {
+    final bool isSelected = _selectedTabIndex == index;
+    final activeColor = const Color(0xFF2D4A3E);
+    final inactiveColor = Colors.grey[700];
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedTabIndex = index;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        margin: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: isSelected ? activeColor : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Center(
+          child: Text(
+            title,
             style: TextStyle(
-              color: color,
+              color: isSelected ? Colors.white : inactiveColor,
               fontWeight: FontWeight.w600,
-              // RESPONSIVE: Ukuran font proporsional
-              fontSize: screenWidth * 0.035,
+              fontSize: screenWidth * 0.04,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String text,
+      {Color iconColor = const Color(0xFF2D4A3E), required double screenWidth}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: iconColor, size: 24),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: screenWidth * 0.04, // Sekitar 14-15px
+                color: const Color(0xFF425C48),
+                height: 1.4,
+              ),
             ),
           ),
         ],
@@ -313,23 +266,100 @@ class _DetailWisataState extends State<DetailWisata> {
     );
   }
 
-  Widget _buildPriceItem(double screenWidth) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.03, vertical: screenWidth * 0.025),
-      decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.green.withOpacity(0.2), width: 1),
-      ),
-      child: Text(
-        'Rp ${widget.wisata.harga}',
-        style: TextStyle(
-          color: Colors.green,
-          fontWeight: FontWeight.w600,
-          fontSize: screenWidth * 0.035,
+  Widget _buildFasilitasChip(IconData icon, String label) {
+    return Chip(
+      avatar: Icon(icon, color: const Color(0xFF2D4A3E), size: 18),
+      label: Text(label),
+      labelStyle:
+          const TextStyle(color: Color(0xFF2D4A3E), fontWeight: FontWeight.w600),
+      backgroundColor: const Color(0xFF2D4A3E).withOpacity(0.1),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: const Color(0xFF2D4A3E).withOpacity(0.2))),
+    );
+  }
+
+  Widget _buildTentangSection(double screenWidth) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // --- Bagian Info (Harga, Jarak, Jam, Alamat) ---
+        _buildInfoRow(
+          Icons.attach_money,
+          'Rp ${widget.wisata.harga}',
+          iconColor: Colors.green.shade700,
+          screenWidth: screenWidth,
         ),
-      ),
+        _buildInfoRow(
+          Icons.location_on_outlined,
+          widget.wisata.jarak,
+          screenWidth: screenWidth,
+        ),
+        _buildInfoRow(
+          Icons.place_outlined,
+          widget.wisata.alamat, // Menggunakan alamat dari model
+          screenWidth: screenWidth,
+        ),
+
+        // --- PENTING: Placeholder untuk Jam Operasional ---
+        // Ganti "08.00 - 17.00 WIB" dengan data dari model Anda jika ada
+        // (Misal: widget.wisata.jamBuka)
+        _buildInfoRow(
+          Icons.access_time_outlined,
+          '08.00 - 17.00 WIB', // Placeholder
+          screenWidth: screenWidth,
+        ),
+
+        const SizedBox(height: 16),
+
+        // --- Bagian Fasilitas (Placeholder) ---
+        const Text(
+          'Fasilitas',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF2D4A3E),
+          ),
+        ),
+        const SizedBox(height: 16),
+        // Ganti list ini dengan data dari model Anda jika ada
+        // (Misal: widget.wisata.fasilitas.map((f) => _buildFasilitasChip(f.icon, f.nama)).toList())
+        Wrap(
+          spacing: 8.0,
+          runSpacing: 8.0,
+          children: [
+            _buildFasilitasChip(Icons.wc, 'Toilet'),
+            _buildFasilitasChip(Icons.storefront, 'Warung'),
+            _buildFasilitasChip(Icons.mosque, 'Mushola'),
+            _buildFasilitasChip(Icons.local_parking, 'Parkir'),
+          ],
+        ),
+        // --- Akhir Bagian Fasilitas ---
+
+        const SizedBox(height: 32),
+
+        // --- Bagian Deskripsi (Tetap Sama) ---
+        const Text(
+          'Deskripsi',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF2D4A3E),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          widget.wisata.caption,
+          style: TextStyle(
+            fontSize: screenWidth * 0.035,
+            color: const Color(0xFF666666).withOpacity(0.8),
+            height: 1.5,
+          ),
+          textAlign: TextAlign.justify,
+        ),
+        const SizedBox(height: 40), // Spasi di bagian bawah
+      ],
     );
   }
 
@@ -346,7 +376,6 @@ class _DetailWisataState extends State<DetailWisata> {
         ),
         const SizedBox(height: 16),
         SizedBox(
-          // RESPONSIVE: Tinggi peta proporsional
           height: screenWidth * 0.5,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
@@ -408,6 +437,65 @@ class _DetailWisataState extends State<DetailWisata> {
         ),
         const SizedBox(height: 32),
       ],
+    );
+  }
+
+  Widget _buildImageGallery(List<String> images, double screenWidth) {
+    final galleryHeight = screenWidth * 0.2;
+    return Container(
+      height: galleryHeight,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 15,
+            spreadRadius: 2,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: images.length,
+        itemBuilder: (context, index) {
+          final imagePath = images[index];
+          final bool isSelected = imagePath == _currentMainImage;
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _currentMainImage = imagePath;
+              });
+            },
+            child: Container(
+              width: galleryHeight - 16,
+              height: galleryHeight - 16,
+              margin: const EdgeInsets.symmetric(horizontal: 6.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color:
+                      isSelected ? const Color(0xFF2D4A3E) : Colors.transparent,
+                  width: 3,
+                ),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 

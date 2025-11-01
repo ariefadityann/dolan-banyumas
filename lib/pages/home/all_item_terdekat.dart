@@ -102,7 +102,7 @@ class _AllItemTerdekatState extends State<AllItemTerdekat> {
     return Container(
       padding: EdgeInsets.only(bottom: screenHeight * 0.02),
       decoration: const BoxDecoration(
-        color: Color(0xFF2E7D32),
+        color: Color.fromARGB(255, 212, 72, 62),
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(24),
           bottomRight: Radius.circular(24),
