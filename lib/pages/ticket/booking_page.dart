@@ -59,7 +59,7 @@ class _BookingPageState extends State<BookingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE3F0E3),
+      backgroundColor: const Color(0xFFFFE6E5),
       appBar: AppBar(
         title: const Text(
           'Pemesanan Tiket',
@@ -69,7 +69,7 @@ class _BookingPageState extends State<BookingPage> {
             fontSize: 18,
           ),
         ),
-        backgroundColor: const Color(0xFFE3F0E3),
+        backgroundColor: const Color(0xFFFFE6E5),
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.black87),
@@ -119,7 +119,7 @@ class _BookingPageState extends State<BookingPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF2E4C3D),
+        color: const Color(0xFFF44336),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -145,8 +145,8 @@ class _BookingPageState extends State<BookingPage> {
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => 
-                  const Icon(Icons.forest, size: 40, color: Colors.white),
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.forest, size: 40, color: Colors.white),
               ),
             ),
           ),
@@ -173,7 +173,8 @@ class _BookingPageState extends State<BookingPage> {
                 ),
                 const SizedBox(height: 6),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(8),
@@ -222,16 +223,22 @@ class _BookingPageState extends State<BookingPage> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.calendar_today, color: Colors.grey, size: 20),
+                    const Icon(Icons.calendar_today,
+                        color: Colors.grey, size: 20),
                     const SizedBox(width: 12),
                     Text(
-                      _selectedDate == null 
-                          ? 'Pilih Tanggal' 
-                          : DateFormat('EEEE, d MMMM y', 'id_ID').format(_selectedDate!),
+                      _selectedDate == null
+                          ? 'Pilih Tanggal'
+                          : DateFormat('EEEE, d MMMM y', 'id_ID')
+                              .format(_selectedDate!),
                       style: TextStyle(
                         fontSize: 16,
-                        color: _selectedDate == null ? Colors.grey : Colors.black87,
-                        fontWeight: _selectedDate == null ? FontWeight.normal : FontWeight.w500,
+                        color: _selectedDate == null
+                            ? Colors.grey
+                            : Colors.black87,
+                        fontWeight: _selectedDate == null
+                            ? FontWeight.normal
+                            : FontWeight.w500,
                       ),
                     ),
                   ],
@@ -260,11 +267,6 @@ class _BookingPageState extends State<BookingPage> {
         const SizedBox(height: 12),
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 255, 255, 255),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color.fromARGB(255, 255, 255, 255)),
-          ),
           child: Column(
             children: _ticketCounts.entries.map((entry) {
               return Padding(
@@ -293,7 +295,7 @@ class _BookingPageState extends State<BookingPage> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF2E4C3D),
+                    color: Color(0xFFF44336),
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -311,7 +313,7 @@ class _BookingPageState extends State<BookingPage> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(25),
-              border: Border.all(color: const Color(0xFF2E4C3D)),
+              border: Border.all(color: const Color(0xFFF44336)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -324,7 +326,7 @@ class _BookingPageState extends State<BookingPage> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.remove, size: 18),
-                  color: const Color(0xFF2E4C3D),
+                  color: const Color(0xFFF44336),
                   padding: const EdgeInsets.all(8),
                   constraints: const BoxConstraints(),
                   onPressed: () {
@@ -343,13 +345,13 @@ class _BookingPageState extends State<BookingPage> {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2E4C3D),
+                      color: Color(0xFFF44336),
                     ),
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.add, size: 18),
-                  color: const Color(0xFF2E4C3D),
+                  color: const Color(0xFFF44336),
                   padding: const EdgeInsets.all(8),
                   constraints: const BoxConstraints(),
                   onPressed: () {
@@ -371,7 +373,7 @@ class _BookingPageState extends State<BookingPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F7EB),
+        color: const Color(0xFFFFE6E5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: const Color(0xFFE3F0E3)),
       ),
@@ -383,7 +385,7 @@ class _BookingPageState extends State<BookingPage> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2E4C3D),
+              color: Color(0xFFF44336),
             ),
           ),
           Text(
@@ -391,7 +393,7 @@ class _BookingPageState extends State<BookingPage> {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2E4C3D),
+              color: Color(0xFFF44336),
             ),
           ),
         ],
@@ -401,88 +403,90 @@ class _BookingPageState extends State<BookingPage> {
 
   Widget _buildActionButtons() {
     return Column(
-    children: [
-      SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: ElevatedButton(
-          onPressed: _totalPrice > 0
-              ? () {
-                  // Validasi jika tanggal belum dipilih
-                  if (_selectedDate == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Silakan pilih tanggal kunjungan terlebih dahulu.'),
-                        backgroundColor: Colors.red,
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+            onPressed: _totalPrice > 0
+                ? () {
+                    // Validasi jika tanggal belum dipilih
+                    if (_selectedDate == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'Silakan pilih tanggal kunjungan terlebih dahulu.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
+
+                    // Hitung total tiket
+                    int totalTickets = _ticketCounts.values
+                        .reduce((sum, count) => sum + count);
+
+                    // Navigasi ke halaman detail pesanan
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderDetailPage(
+                          // Kita hardcode namanya sesuai gambar
+                          namaPemesan: 'Muhammad Arief Adityan',
+                          tempatWisata: widget.wisata.nama,
+                          tanggalBerkunjung: _selectedDate!,
+                          jumlahTiket: totalTickets,
+                          totalHarga: _totalPrice,
+                        ),
                       ),
                     );
-                    return;
                   }
-
-                  // Hitung total tiket
-                  int totalTickets = _ticketCounts.values.reduce((sum, count) => sum + count);
-
-                  // Navigasi ke halaman detail pesanan
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OrderDetailPage(
-                        // Kita hardcode namanya sesuai gambar
-                        namaPemesan: 'Muhammad Arief Adityan',
-                        tempatWisata: widget.wisata.nama,
-                        tanggalBerkunjung: _selectedDate!,
-                        jumlahTiket: totalTickets,
-                        totalHarga: _totalPrice,
-                      ),
-                    ),
-                  );
-                }
-              : null,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF2E4C3D),
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+                : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFF44336),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 2,
+              disabledBackgroundColor: Colors.grey.shade400,
             ),
-            elevation: 2,
-            disabledBackgroundColor: Colors.grey.shade400,
-          ),
-          child: const Text(
-            'Lanjutkan Pembayaran',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+            child: const Text(
+              'Lanjutkan Pembayaran',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
-      ),
         const SizedBox(height: 12),
-      SizedBox(
-        width: double.infinity,
-        height: 50,
-        child: ElevatedButton(
-          onPressed: () => Navigator.pop(context),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: const Color(0xFF2E4C3D),
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: const BorderSide(color: Color(0xFF2E4C3D)),
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: const Color(0xFFF44336),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(color: Color(0xFFF44336)),
+              ),
+              elevation: 0,
             ),
-            elevation: 0,
-          ),
-          child: const Text(
-            'Kembali',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+            child: const Text(
+              'Kembali',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
-      ),
-    ],
-  );
-}
+      ],
+    );
+  }
 }

@@ -27,9 +27,9 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
 
   // Constants for colors
   static const _backgroundColor = Color(0xFFF9F6F0);
-  static const _primaryColor = Color(0xFF3B614A);
-  static const _secondaryColor = Color(0xFF4C7C60);
-  static const _accentColor = Color(0xFFE87A5D);
+  static const _primaryColor = Color(0xFFF44336);
+  static const _secondaryColor = Color(0xFFE57373);
+  static const _accentColor = Color(0xFFF44336);
 
   @override
   Widget build(BuildContext context) {

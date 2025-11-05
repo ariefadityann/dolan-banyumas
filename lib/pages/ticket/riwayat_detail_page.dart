@@ -9,9 +9,9 @@ class RiwayatTicketDetailPage extends StatelessWidget {
 
   const RiwayatTicketDetailPage({super.key, required this.ticket});
 
-  static const _primaryColor = Color(0xFF425C48);
+  static const _primaryColor = Color(0xFFF44336);
   static const _lightTextColor = Colors.white70;
-  static const _darkTextColor = Color(0xFF333333);
+  static const _darkTextColor = Color(0xFFF44336);
   static const _whiteColor = Colors.white;
 
   @override

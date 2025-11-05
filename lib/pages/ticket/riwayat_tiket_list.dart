@@ -107,7 +107,7 @@ class _RiwayatTiketListState extends State<RiwayatTiketList> {
           // RESPONSIVE: Proportional border radius
           borderRadius: BorderRadius.circular(screenWidth * 0.04),
         ),
-        color: const Color(0xFF425C48),
+        color: const Color(0xFFE57373),
         child: IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -11,11 +11,11 @@ class AddCardBottomSheet extends StatefulWidget {
 class _AddCardBottomSheetState extends State<AddCardBottomSheet> {
   // Constants for styling to match the image
   static const _backgroundColor = Color(0xFFFAFBFB);
-  static const _primaryTextColor = Color(0xFF3B564A);
-  static const _secondaryTextColor = Color(0xFF6E857B);
-  static const _buttonColor = Color(0xFF3B614A);
-  static const _borderColor = Color(0xFFE0E0E0);
-  static const _labelColor = Color(0xFF3B564A);
+  static const _primaryTextColor = Color(0xFFF44336);
+  static const _secondaryTextColor = Color(0xFFE57373);
+  static const _buttonColor = Color(0xFFF44336);
+  static const _borderColor = Color(0xFFE57373);
+  static const _labelColor = Color(0xFFF44336);
 
   @override
   Widget build(BuildContext context) {

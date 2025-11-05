@@ -20,10 +20,10 @@ class TicketPage extends StatefulWidget {
 
 class _TicketPageState extends State<TicketPage> {
   // Constants
-  static const _backgroundColor = Color.fromARGB(255, 212, 72, 62);
+  static const _backgroundColor = Color(0xFFF44336);
   static const _surfaceColor = Color(0xFFF9F8F5);
-  static const _primaryColor = Color(0xFF425C48);
-  static const _accentColor = Color(0xFFE3F0E3);
+  static const _primaryColor = Color(0xFFF44336);
+  static const _accentColor = Color(0xFFFFE6E5);
   static const _borderRadius = 24.0;
   static const _filterBorderRadius = 30.0;
 
@@ -149,7 +149,7 @@ class _TicketPageState extends State<TicketPage> {
                 Text(
                   'Mau kemana hari ini',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: Colors.white,
                     // RESPONSIVE: Proportional font size
                     fontSize: screenWidth * 0.04,
                   ),
@@ -237,7 +237,7 @@ class _TicketPageState extends State<TicketPage> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? const Color.fromARGB(255, 223, 99, 80) : Colors.transparent,
+          color: isSelected ? const Color(0xFFFFE6E5) : Colors.transparent,
           borderRadius: BorderRadius.circular(_filterBorderRadius),
         ),
         // === PERUBAHAN DI SINI ===
@@ -247,7 +247,7 @@ class _TicketPageState extends State<TicketPage> {
             label,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: isSelected ? const Color.fromARGB(255, 4, 4, 4) : Colors.grey[700],
+              color: isSelected ? const Color(0xFFF44336) : Colors.grey[700],
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               fontSize: 14,
             ),

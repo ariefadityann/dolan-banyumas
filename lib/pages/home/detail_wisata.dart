@@ -19,7 +19,7 @@ class DetailWisata extends StatefulWidget {
 
 class _DetailWisataState extends State<DetailWisata> {
   late String _currentMainImage;
-  int _selectedTabIndex = 0; // 0: Tentang, 1: Lokasi
+  int _selectedTabIndex = 0; // 0: Tentang, 1: Lokasi, 2: Review
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class _DetailWisataState extends State<DetailWisata> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: screenHeight * 0.4,
+            expandedHeight: screenHeight * 0.3,
             backgroundColor: const Color(0xFFF9F8F5),
             elevation: 0,
             pinned: true,
@@ -107,12 +107,6 @@ class _DetailWisataState extends State<DetailWisata> {
                         ],
                       ),
                     ),
-                  ),
-                  Positioned(
-                    bottom: 20,
-                    left: screenWidth * 0.05,
-                    right: screenWidth * 0.05,
-                    child: _buildImageGallery(allImages, screenWidth),
                   ),
                 ],
               ),
@@ -160,7 +154,7 @@ class _DetailWisataState extends State<DetailWisata> {
                     style: TextStyle(
                       fontSize: screenWidth * 0.07,
                       fontWeight: FontWeight.w900,
-                      color: const Color(0xFF2D4A3E),
+                      color: const Color(0xFFF44336),
                       letterSpacing: 1.5,
                     ),
                   ),
@@ -170,7 +164,8 @@ class _DetailWisataState extends State<DetailWisata> {
                     style: TextStyle(
                       fontSize: screenWidth * 0.04,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF2D4A3E).withOpacity(0.7),
+                      color: const Color.fromARGB(255, 74, 45, 45)
+                          .withOpacity(0.7),
                       letterSpacing: 1.2,
                     ),
                   ),
@@ -180,8 +175,11 @@ class _DetailWisataState extends State<DetailWisata> {
                   IndexedStack(
                     index: _selectedTabIndex,
                     children: [
-                      _buildTentangSection(screenWidth),
-                      _buildLocationSection(screenWidth),
+                      _buildTentangSection(screenWidth, allImages),
+                      _buildGambarSection(screenWidth, allImages),
+                      _buildReviewSection(
+                        screenWidth,
+                      ),
                     ],
                   ),
                 ],
@@ -190,7 +188,59 @@ class _DetailWisataState extends State<DetailWisata> {
           ),
         ],
       ),
-      bottomNavigationBar: _buildBottomButton(screenWidth),
+    );
+  }
+
+  void _showFullScreenImage(String imagePath) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Dialog(
+            insetPadding: EdgeInsets.zero,
+            backgroundColor: Colors.black.withOpacity(0.85),
+            child: Stack(
+              children: [
+                InteractiveViewer(
+                  panEnabled: true,
+                  scaleEnabled: true,
+                  child: Center(
+                    child: Image.asset(
+                      imagePath,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey[900],
+                        child:
+                            const Icon(Icons.broken_image, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 32,
+                  right: 16,
+                  child: SafeArea(
+                    child: InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      borderRadius: BorderRadius.circular(30),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.5),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.close, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -204,7 +254,8 @@ class _DetailWisataState extends State<DetailWisata> {
       child: Row(
         children: [
           Expanded(child: _buildTabButton('Tentang', 0, screenWidth)),
-          Expanded(child: _buildTabButton('Lokasi', 1, screenWidth)),
+          Expanded(child: _buildTabButton('Gambar', 1, screenWidth)),
+          Expanded(child: _buildTabButton('Review', 2, screenWidth)),
         ],
       ),
     );
@@ -212,7 +263,7 @@ class _DetailWisataState extends State<DetailWisata> {
 
   Widget _buildTabButton(String title, int index, double screenWidth) {
     final bool isSelected = _selectedTabIndex == index;
-    final activeColor = const Color(0xFF2D4A3E);
+    final activeColor = const Color(0xFFF44336);
     final inactiveColor = Colors.grey[700];
 
     return GestureDetector(
@@ -243,7 +294,8 @@ class _DetailWisataState extends State<DetailWisata> {
   }
 
   Widget _buildInfoRow(IconData icon, String text,
-      {Color iconColor = const Color(0xFF2D4A3E), required double screenWidth}) {
+      {Color iconColor = const Color(0xFF2D4A3E),
+      required double screenWidth}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Row(
@@ -256,7 +308,7 @@ class _DetailWisataState extends State<DetailWisata> {
               text,
               style: TextStyle(
                 fontSize: screenWidth * 0.04, // Sekitar 14-15px
-                color: const Color(0xFF425C48),
+                color: const Color.fromARGB(255, 92, 66, 66),
                 height: 1.4,
               ),
             ),
@@ -268,19 +320,19 @@ class _DetailWisataState extends State<DetailWisata> {
 
   Widget _buildFasilitasChip(IconData icon, String label) {
     return Chip(
-      avatar: Icon(icon, color: const Color(0xFF2D4A3E), size: 18),
+      avatar: Icon(icon, color: const Color(0xFFF44336), size: 18),
       label: Text(label),
-      labelStyle:
-          const TextStyle(color: Color(0xFF2D4A3E), fontWeight: FontWeight.w600),
-      backgroundColor: const Color(0xFF2D4A3E).withOpacity(0.1),
+      labelStyle: const TextStyle(
+          color: Color.fromARGB(255, 74, 45, 46), fontWeight: FontWeight.w600),
+      backgroundColor: const Color(0xFFFFE6E5).withOpacity(0.1),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: const Color(0xFF2D4A3E).withOpacity(0.2))),
+          side: BorderSide(color: const Color(0xFFF44336).withOpacity(0.2))),
     );
   }
 
-  Widget _buildTentangSection(double screenWidth) {
+  Widget _buildTentangSection(double screenWidth, List<String> allImages) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -288,17 +340,19 @@ class _DetailWisataState extends State<DetailWisata> {
         _buildInfoRow(
           Icons.attach_money,
           'Rp ${widget.wisata.harga}',
-          iconColor: Colors.green.shade700,
+          iconColor: Colors.red.shade700,
           screenWidth: screenWidth,
         ),
         _buildInfoRow(
           Icons.location_on_outlined,
+          iconColor: Colors.red.shade700,
           widget.wisata.jarak,
           screenWidth: screenWidth,
         ),
         _buildInfoRow(
           Icons.place_outlined,
           widget.wisata.alamat, // Menggunakan alamat dari model
+          iconColor: Colors.red.shade700,
           screenWidth: screenWidth,
         ),
 
@@ -308,6 +362,7 @@ class _DetailWisataState extends State<DetailWisata> {
         _buildInfoRow(
           Icons.access_time_outlined,
           '08.00 - 17.00 WIB', // Placeholder
+          iconColor: Colors.red.shade700,
           screenWidth: screenWidth,
         ),
 
@@ -319,7 +374,7 @@ class _DetailWisataState extends State<DetailWisata> {
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF2D4A3E),
+            color: Color(0xFFF44336),
           ),
         ),
         const SizedBox(height: 16),
@@ -345,7 +400,7 @@ class _DetailWisataState extends State<DetailWisata> {
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w800,
-            color: Color(0xFF2D4A3E),
+            color: Color(0xFFF44336),
           ),
         ),
         const SizedBox(height: 16),
@@ -358,21 +413,25 @@ class _DetailWisataState extends State<DetailWisata> {
           ),
           textAlign: TextAlign.justify,
         ),
+        const SizedBox(height: 24),
+        // --- Lokasi (dipindahkan ke bawah deskripsi) ---
+        _buildLocationMapSection(screenWidth),
         const SizedBox(height: 40), // Spasi di bagian bawah
       ],
     );
   }
 
-  Widget _buildLocationSection(double screenWidth) {
+  Widget _buildLocationMapSection(double screenWidth) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 8),
         const Text(
           'Lokasi',
           style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2D4A3E)),
+              color: Color(0xFFF44336)),
         ),
         const SizedBox(height: 16),
         SizedBox(
@@ -413,7 +472,7 @@ class _DetailWisataState extends State<DetailWisata> {
         Text(
           widget.wisata.alamat,
           style: TextStyle(
-              fontSize: screenWidth * 0.04, color: const Color(0xFF425C48)),
+              fontSize: screenWidth * 0.04, color: const Color(0xFFF44336)),
         ),
         const SizedBox(height: 24),
         SizedBox(
@@ -421,7 +480,7 @@ class _DetailWisataState extends State<DetailWisata> {
           child: ElevatedButton(
             onPressed: _launchMapsUrl,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF425C48),
+              backgroundColor: const Color(0xFFF44336),
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
@@ -435,106 +494,235 @@ class _DetailWisataState extends State<DetailWisata> {
             ),
           ),
         ),
-        const SizedBox(height: 32),
       ],
     );
   }
 
-  Widget _buildImageGallery(List<String> images, double screenWidth) {
-    final galleryHeight = screenWidth * 0.2;
-    return Container(
-      height: galleryHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 15,
-            spreadRadius: 2,
-            offset: const Offset(0, 4),
+  Widget _buildGambarSection(double screenWidth, List<String> allImages) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Gambar',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFFF44336),
           ),
-        ],
-      ),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: images.length,
-        itemBuilder: (context, index) {
-          final imagePath = images[index];
-          final bool isSelected = imagePath == _currentMainImage;
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                _currentMainImage = imagePath;
-              });
-            },
-            child: Container(
-              width: galleryHeight - 16,
-              height: galleryHeight - 16,
-              margin: const EdgeInsets.symmetric(horizontal: 6.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(
-                  color:
-                      isSelected ? const Color(0xFF2D4A3E) : Colors.transparent,
-                  width: 3,
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.broken_image, color: Colors.grey),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 180,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: allImages.map((imagePath) {
+                return GestureDetector(
+                  onTap: () {
+                    _showFullScreenImage(imagePath);
+                  },
+                  child: Container(
+                    width: 340,
+                    height: 180,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.12),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        imagePath,
+                        width: 340,
+                        height: 180,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.broken_image,
+                              color: Colors.grey),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              }).toList(),
             ),
-          );
-        },
-      ),
+          ),
+        ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 
-  Widget _buildBottomButton(double screenWidth) {
-    return Container(
-      padding:
-          EdgeInsets.symmetric(horizontal: screenWidth * 0.06, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: ElevatedButton(
-        onPressed: () {
-          // Navigasi ke halaman booking
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF2D4A3E),
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 0,
-        ),
-        child: Text(
-          'PESAN SEKARANG',
+  Widget _buildReviewSection(double screenWidth) {
+    final List<Map<String, String>> reviews = [
+      {
+        'nama': 'Rina',
+        'komentar': 'Tempatnya sejuk dan indah! Cocok buat healing.'
+      },
+      {
+        'nama': 'Bagus',
+        'komentar': 'Pemandangannya keren, cuma akses jalannya agak sempit.'
+      },
+      {
+        'nama': 'Lina',
+        'komentar': 'Bersih, banyak spot foto bagus! Recommended!'
+      },
+    ];
+
+    final TextEditingController _namaController = TextEditingController();
+    final TextEditingController _komentarController = TextEditingController();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Review Pengunjung',
           style: TextStyle(
-            fontSize: screenWidth * 0.045,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.2,
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFFF44336),
           ),
         ),
-      ),
+        const SizedBox(height: 16),
+
+        // --- Daftar komentar dummy ---
+        Column(
+          children: reviews.map((review) {
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: Colors.red.shade100),
+              ),
+              margin: const EdgeInsets.only(bottom: 12),
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      review['nama']!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: screenWidth * 0.04,
+                        color: const Color(0xFFF44336),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      review['komentar']!,
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.037,
+                        color: Colors.grey[700],
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+
+        const SizedBox(height: 24),
+
+        // --- Form input komentar ---
+        const Text(
+          'Tambahkan Komentar',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFF44336),
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // Nama
+        TextField(
+          controller: _namaController,
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            labelText: 'Nama',
+            labelStyle: const TextStyle(color: Color(0xFFF44336)),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red.shade200),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color(0xFFF44336), width: 2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+
+        // Komentar
+        TextField(
+          controller: _komentarController,
+          style: const TextStyle(color: Colors.black),
+          maxLines: 3,
+          decoration: InputDecoration(
+            labelText: 'Komentar',
+            labelStyle: const TextStyle(color: Color(0xFFF44336)),
+            alignLabelWithHint: true,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red.shade200),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color(0xFFF44336), width: 2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 16),
+
+        // Tombol kirim (dummy)
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              if (_namaController.text.isEmpty ||
+                  _komentarController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Nama dan komentar tidak boleh kosong'),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Komentar berhasil dikirim (dummy) 😊'),
+                  ),
+                );
+                _namaController.clear();
+                _komentarController.clear();
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFF44336),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text(
+              'Kirim',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ),
+        ),
+        const SizedBox(height: 32),
+      ],
     );
   }
 }

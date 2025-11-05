@@ -189,7 +189,7 @@ class _TransportPageState extends State<TransportPage> {
           padding: EdgeInsets.symmetric(
               vertical: 10, horizontal: screenWidth * 0.04),
           decoration: BoxDecoration(
-            color: const Color(0xFF425C48), // Mengubah warna menjadi hijau tua
+            color: const Color(0xFFFFE6E5), // Mengubah warna menjadi hijau tua
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
@@ -221,7 +221,7 @@ class _TransportPageState extends State<TransportPage> {
       child: Container(
         padding: EdgeInsets.all(screenWidth * 0.04),
         decoration: BoxDecoration(
-          color: const Color(0xFFE6F0E5).withOpacity(0.95),
+          color: const Color(0xFFFFE6E5).withOpacity(0.95),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -257,7 +257,7 @@ class _TransportPageState extends State<TransportPage> {
                     child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF425C48),
+                            backgroundColor: const Color(0xFFF44336),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8))),
@@ -270,7 +270,7 @@ class _TransportPageState extends State<TransportPage> {
                     child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF425C48),
+                            backgroundColor: const Color(0xFFF44336),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8))),

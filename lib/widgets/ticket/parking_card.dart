@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // Pastikan path import ini sudah benar sesuai struktur proyek Anda
-import '../../models/wisata_model.dart'; 
+import '../../models/wisata_model.dart';
 import '../../pages/ticket/booking_parkir_page.dart';
-
 
 class ParkingCard extends StatelessWidget {
   final TempatWisata parkir;
@@ -13,8 +12,8 @@ class ParkingCard extends StatelessWidget {
     required this.parkir,
   });
 
-  static const Color _primaryColor = Color(0xFF425C48);
-  static const Color _accentColor = Color(0xFFE3F0E3);
+  static const Color _primaryColor = Color(0xFFE57373);
+  static const Color _accentColor = Color(0xFFFFE6E5);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,8 @@ class ParkingCard extends StatelessWidget {
             errorBuilder: (context, error, stackTrace) => Container(
               height: 120,
               color: Colors.black26,
-              child: const Icon(Icons.local_parking, color: Colors.white54, size: 50),
+              child: const Icon(Icons.local_parking,
+                  color: Colors.white54, size: 50),
             ),
           ),
           Padding(
@@ -65,7 +65,8 @@ class ParkingCard extends StatelessWidget {
                   children: [
                     Text(
                       parkir.nama,
-                      style: const TextStyle(color: Colors.white70, fontSize: 16),
+                      style:
+                          const TextStyle(color: Colors.white70, fontSize: 16),
                     ),
                     Text(
                       currencyFormatter.format(price),
@@ -89,7 +90,8 @@ class ParkingCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BookingParkirPage(parkir: parkir),
+                          builder: (context) =>
+                              BookingParkirPage(parkir: parkir),
                         ),
                       );
                     },
@@ -103,7 +105,8 @@ class ParkingCard extends StatelessWidget {
                     ),
                     child: const Text(
                       'Pesan Sekarang',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ),
                 ),

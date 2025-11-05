@@ -12,10 +12,10 @@ class QrisPaymentPage extends StatelessWidget {
   });
 
   // Constants for styling
-  static const _pageBackgroundColor = Color(0xFFE6F0E9);
+  static const _pageBackgroundColor = Color(0xFFFFE6E5);
   static const _cardBackgroundColor = Color(0xFFFAFDFB);
-  static const _primaryTextColor = Color(0xFF3B564A);
-  static const _buttonColor = Color(0xFF3B614A);
+  static const _primaryTextColor = Color(0xFFF44336);
+  static const _buttonColor = Color(0xFFF44336);
 
   @override
   Widget build(BuildContext context) {

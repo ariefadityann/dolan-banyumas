@@ -14,9 +14,9 @@ class PaymentMethodPage extends StatelessWidget {
   // Constants for styling
   static const _pageBackgroundColor = Color(0xFFF8FDF9);
   static const _cardBackgroundColor = Colors.white;
-  static const _primaryTextColor = Color(0xFF2E7D32);
-  static const _secondaryTextColor = Color(0xFF666666);
-  static const _accentColor = Color(0xFF4CAF50);
+  static const _primaryTextColor = Color(0xFFF44336);
+  static const _secondaryTextColor = Color(0xFFE57373);
+  static const _accentColor = Color(0xFFE57373);
   static const _shadowColor = Color(0x1A000000);
 
   @override

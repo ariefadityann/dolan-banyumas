@@ -6,11 +6,11 @@ class AddPaymentMethodPage extends StatelessWidget {
   const AddPaymentMethodPage({super.key});
 
   // Constants for styling to match the image
-  static const _pageBackgroundColor = Color(0xFFE6F0E9);
+  static const _pageBackgroundColor = Color(0xFFFFE6E5);
   static const _cardBackgroundColor = Color(0xFFFAFDFB);
-  static const _primaryTextColor = Color(0xFF3B564A);
-  static const _secondaryTextColor = Color(0xFF6E857B);
-  static const _optionCardBorderColor = Color(0xFFE0E0E0);
+  static const _primaryTextColor = Color(0xFFF44336);
+  static const _secondaryTextColor = Color(0xFFE57373);
+  static const _optionCardBorderColor = Color(0xFFF44336);
 
   @override
   Widget build(BuildContext context) {

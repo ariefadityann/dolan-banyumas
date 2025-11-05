@@ -95,14 +95,14 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE3F0E3),
+      backgroundColor: const Color(0xFFFFE6E5),
       appBar: AppBar(
         title: const Text(
           'Pemesanan Parkir',
           style: TextStyle(
               color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 18),
         ),
-        backgroundColor: const Color(0xFFE3F0E3),
+        backgroundColor: const Color(0xFFFFE6E5),
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
@@ -151,7 +151,7 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF2E4C3D),
+        color: const Color(0xFFF44336),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -254,6 +254,7 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
         TextField(
           controller: _platController,
           textCapitalization: TextCapitalization.characters,
+          style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             labelText: 'Nomer Plat Kendaraan',
             hintText: 'Contoh: B 1234 ABC',
@@ -277,7 +278,7 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F7EB),
+        color: const Color(0xFFFFE6E5),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -287,28 +288,28 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
               style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF2E4C3D))),
+                  color: Color(0xFFF44336))),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(25),
-              border: Border.all(color: const Color(0xFF2E4C3D)),
+              border: Border.all(color: const Color(0xFFF44336)),
             ),
             child: Row(
               children: [
                 IconButton(
                   icon: const Icon(Icons.remove,
-                      size: 18, color: Color(0xFF2E4C3D)),
+                      size: 18, color: Color(0xFFF44336)),
                   onPressed: () => onUpdate(count - 1),
                 ),
                 Text(count.toString(),
                     style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF2E4C3D))),
+                        color: Color(0xFFF44336))),
                 IconButton(
                   icon:
-                      const Icon(Icons.add, size: 18, color: Color(0xFF2E4C3D)),
+                      const Icon(Icons.add, size: 18, color: Color(0xFFF44336)),
                   onPressed: () => onUpdate(count + 1),
                 ),
               ],
@@ -327,13 +328,13 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
             style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF2E4C3D))),
+                color: Color(0xFFF44336))),
         Text(
           'Rp ${NumberFormat("#,##0", "id_ID").format(_totalTarif)}',
           style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2E4C3D)),
+              color: Color(0xFFF44336)),
         ),
       ],
     );
@@ -349,7 +350,7 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
             // Menggunakan fungsi _lanjutPemesanan yang baru dibuat
             onPressed: _lanjutPemesanan,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2E4C3D),
+              backgroundColor: const Color(0xFFF44336),
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
@@ -366,10 +367,10 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
             onPressed: () => Navigator.pop(context),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
-              foregroundColor: const Color(0xFF2E4C3D),
+              foregroundColor: const Color(0xFFF44336),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(color: Color(0xFF2E4C3D)),
+                side: const BorderSide(color: Color(0xFFF44336)),
               ),
               elevation: 0,
             ),

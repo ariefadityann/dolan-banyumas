@@ -22,7 +22,7 @@ class SectionTitle extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-                color: Color(0xFF425C48),
+                color: Color(0xFFF44336),
                 fontSize: 20,
                 fontWeight: FontWeight.bold),
           ),
@@ -30,7 +30,7 @@ class SectionTitle extends StatelessWidget {
             onPressed: onPressed,
             child: const Text(
               'Lihat Semua',
-              style: TextStyle(fontSize: 14, color: Colors.red),
+              style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ),
         ],
