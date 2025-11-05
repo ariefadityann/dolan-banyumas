@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Dolan Banyumas',
             theme: ThemeData(
-              primarySwatch: Colors.green,
+              primarySwatch: Colors.red,
               scaffoldBackgroundColor: const Color(0xFFF5F5F0),
               fontFamily: 'Poppins',
               textTheme: Typography.englishLike2018.apply(

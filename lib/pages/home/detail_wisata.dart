@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-// import 'package:dolan_banyumas/widgets/rekomendasi_card.dart'; // Sesuaikan path jika berbeda
+import 'package:flutter/material.dart'; // import 'package:dolan_banyumas/widgets/rekomendasi_card.dart'; // Sesuaikan path jika berbeda
 import 'package:flutter_map/flutter_map.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong2/latlong.dart' as latlong;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../models/wisata_model.dart';
 import '../../providers/favorites_provider.dart';
 
@@ -25,6 +24,15 @@ class _DetailWisataState extends State<DetailWisata> {
   void initState() {
     super.initState();
     _currentMainImage = widget.wisata.gambarUrl;
+  }
+
+  void _showDummySnackBar(String platform) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Menuju ke halaman $platform (dummy)'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   Future<void> _launchMapsUrl() async {
@@ -355,7 +363,6 @@ class _DetailWisataState extends State<DetailWisata> {
           iconColor: Colors.red.shade700,
           screenWidth: screenWidth,
         ),
-
         // --- PENTING: Placeholder untuk Jam Operasional ---
         // Ganti "08.00 - 17.00 WIB" dengan data dari model Anda jika ada
         // (Misal: widget.wisata.jamBuka)
@@ -365,7 +372,12 @@ class _DetailWisataState extends State<DetailWisata> {
           iconColor: Colors.red.shade700,
           screenWidth: screenWidth,
         ),
-
+        _buildInfoRow(
+          Icons.phone,
+          widget.wisata.telepon, // Menggunakan alamat dari model
+          iconColor: Colors.red.shade700,
+          screenWidth: screenWidth,
+        ),
         const SizedBox(height: 16),
 
         // --- Bagian Fasilitas (Placeholder) ---
@@ -391,7 +403,48 @@ class _DetailWisataState extends State<DetailWisata> {
           ],
         ),
         // --- Akhir Bagian Fasilitas ---
+        const SizedBox(height: 24),
 
+// --- Bagian Media Sosial (BARU) ---
+        const Text(
+          'Media Sosial',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFFF44336),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 16,
+          children: [
+            IconButton(
+              icon: const Icon(FontAwesomeIcons.instagram,
+                  size: 28, color: Colors.pink),
+              onPressed: () => _showDummySnackBar('Instagram'),
+            ),
+            IconButton(
+              icon: const Icon(FontAwesomeIcons.whatsapp,
+                  size: 28, color: Colors.green),
+              onPressed: () => _showDummySnackBar('WhatsApp'),
+            ),
+            IconButton(
+              icon: const Icon(FontAwesomeIcons.facebook,
+                  size: 28, color: Colors.blue),
+              onPressed: () => _showDummySnackBar('Facebook'),
+            ),
+            IconButton(
+              icon: const Icon(FontAwesomeIcons.tiktok,
+                  size: 28, color: Colors.black),
+              onPressed: () => _showDummySnackBar('TikTok'),
+            ),
+            IconButton(
+              icon: const Icon(FontAwesomeIcons.youtube,
+                  size: 28, color: Colors.red),
+              onPressed: () => _showDummySnackBar('YouTube'),
+            ),
+          ],
+        ),
         const SizedBox(height: 32),
 
         // --- Bagian Deskripsi (Tetap Sama) ---

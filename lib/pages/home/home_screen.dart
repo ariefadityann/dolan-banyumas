@@ -328,7 +328,7 @@ class _IndexPageState extends State<IndexPage> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: const BoxDecoration(color: Color(0xFF425C48)),
+            decoration: const BoxDecoration(color: Color(0xFFF44336)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,

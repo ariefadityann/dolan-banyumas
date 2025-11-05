@@ -23,7 +23,7 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
 
   List<TempatWisata> _allPlacesInCategory = [];
   List<TempatWisata> _filteredPlaces = [];
-  
+
   // isLoading bisa dihilangkan atau diset false karena data sudah siap
   final bool _isLoading = false;
 
@@ -33,7 +33,8 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
     // Tidak perlu _fetchWisataData() lagi
     // Langsung filter data yang diterima dari widget
     _allPlacesInCategory = widget.allWisata
-        .where((place) => place.kategori.toLowerCase() == widget.category.toLowerCase())
+        .where((place) =>
+            place.kategori.toLowerCase() == widget.category.toLowerCase())
         .toList();
     _filteredPlaces = _allPlacesInCategory;
   }
@@ -87,7 +88,8 @@ class _AllItemsScreenState extends State<AllItemsScreen> {
                                 ? 'Tidak ada data untuk kategori "${widget.category}"'
                                 : 'Tidak ada hasil untuk pencarian "${_searchController.text}"',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 16, color: Colors.grey),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.grey),
                           ),
                         ),
                       )
@@ -130,7 +132,7 @@ class _CustomHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(bottom: 16.0),
       decoration: const BoxDecoration(
-        color: Color(0xFF3A7D44),
+        color: Color(0xFFF44336),
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
