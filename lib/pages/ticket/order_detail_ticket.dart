@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/wisata_model.dart'; // Pastikan path import ini sama
+import 'payment_method_page.dart'; // <-- IMPORT DITAMBAHKAN
 
 class KonfirmasiBookingPage extends StatefulWidget {
   final TempatWisata parkir;
@@ -379,16 +380,17 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
     };
   }
 
+  // --- FUNGSI INI DIMODIFIKASI ---
   void _onContinuePressed() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Pemesanan berhasil! Menuju halaman pembayaran...'),
-        backgroundColor: _primaryColor,
-        duration: Duration(seconds: 2),
+    // Navigasi ke halaman pembayaran
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentMethodPage(
+          totalHarga: widget.totalTarif, // Mengirim total tarif
+        ),
       ),
     );
-    // TODO: Add navigation to payment page
-    print('Navigasi ke halaman pembayaran...');
   }
 }
 

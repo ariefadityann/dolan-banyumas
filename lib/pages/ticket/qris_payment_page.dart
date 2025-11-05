@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import '../home/home_screen.dart'; // <-- GANTI 'your_project_name'
+import 'package:qr_flutter/qr_flutter.dart'; // <-- JANGAN LUPA: flutter pub add qr_flutter
+import 'payment_succes.dart'; // <-- Import halaman sukses
 
 class QrisPaymentPage extends StatelessWidget {
   final double totalHarga;
@@ -21,7 +21,7 @@ class QrisPaymentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final currencyFormatter = NumberFormat.currency(
       locale: 'id_ID',
-      symbol: 'RP ', // Sesuai gambar
+      symbol: 'RP ',
       decimalDigits: 0,
     );
 
@@ -66,26 +66,16 @@ class QrisPaymentPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Header Text
-                    const Text(
-                      'Access',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: _primaryTextColor,
-                      ),
-                    ),
+                    const Text('Access',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: _primaryTextColor)),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Curug Gomblang', // Anda bisa mengganti ini dengan data dinamis
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: _primaryTextColor,
-                      ),
-                    ),
+                    const Text('Curug Gomblang',
+                        style:
+                            TextStyle(fontSize: 16, color: _primaryTextColor)),
                     const SizedBox(height: 16),
-
-                    // Price
                     Text(
                       currencyFormatter.format(totalHarga),
                       style: const TextStyle(
@@ -95,32 +85,26 @@ class QrisPaymentPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-
-                    // QR Code Image
                     QrImageView(
-                      data:
-                          'dummy_qris_data_for_${totalHarga.toInt()}', // Data QR Code
+                      data: 'dummy_qris_data_for_${totalHarga.toInt()}',
                       version: QrVersions.auto,
                       size: 220.0,
                       gapless: false,
-                      // Anda bisa menambahkan logo di tengah QRIS
-                      embeddedImage: const AssetImage(
-                          'assets/images/qris_logo.png'), // Opsional: Ganti dengan path logo Anda
-                      embeddedImageStyle: const QrEmbeddedImageStyle(
-                        size: Size(40, 40),
-                      ),
+                      // Saya komentari aset logo agar tidak error jika file tidak ada
+                      // embeddedImage: const AssetImage(
+                      //     'assets/images/qris_logo.png'),
+                      // embeddedImageStyle: const QrEmbeddedImageStyle(
+                      //   size: Size(40, 40),
+                      // ),
                     ),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 24),
-
-            // Action Buttons
             _buildActionButton(
               text: 'Unduh QRIS',
               onTap: () {
-                // TODO: Tambahkan logika untuk mengunduh gambar QRIS
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                       content: Text('Fitur unduh akan segera hadir!')),
@@ -128,15 +112,21 @@ class QrisPaymentPage extends StatelessWidget {
               },
             ),
             const SizedBox(height: 12),
+            // --- INI TOMBOL DENGAN SOLUSI NAVIGASI ---
             _buildActionButton(
               text: 'Lanjutkan',
               onTap: () {
-                // Kode ini yang mengarahkan ke halaman RiwayatTiketList
-                Navigator.push(
+                // INI SOLUSINYA:
+                // 1. Arahkan ke Halaman Sukses.
+                // 2. Hapus SEMUA halaman di atas HomeScreen/IndexPage.
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const IndexPage(),
+                    builder: (context) => const PaymentSuccessPage(), // Ke halaman sukses
                   ),
+                  // 'route.isFirst' berarti "berhenti menghapus ketika
+                  // kita sampai di rute pertama", yaitu IndexPage Anda.
+                  (Route<dynamic> route) => route.isFirst,
                 );
               },
             ),
@@ -146,7 +136,6 @@ class QrisPaymentPage extends StatelessWidget {
     );
   }
 
-  // A reusable widget for the action buttons
   Widget _buildActionButton(
       {required String text, required VoidCallback onTap}) {
     return SizedBox(
