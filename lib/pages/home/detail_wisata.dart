@@ -358,7 +358,7 @@ class _DetailWisataState extends State<DetailWisata> {
           screenWidth: screenWidth,
         ),
         _buildInfoRow(
-          Icons.place_outlined,
+          FontAwesomeIcons.route,
           widget.wisata.alamat, // Menggunakan alamat dari model
           iconColor: Colors.red.shade700,
           screenWidth: screenWidth,
