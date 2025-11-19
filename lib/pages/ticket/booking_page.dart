@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // 1. Tambah Import ini
 import '../../models/wisata_model.dart';
-import 'order_detail_page.dart'; // Sesuaikan path jika perlu
+import 'order_detail_page.dart'; 
 
 class BookingPage extends StatefulWidget {
   final TempatWisata wisata;
@@ -25,13 +26,30 @@ class _BookingPageState extends State<BookingPage> {
   int _ticketPrice = 0;
   DateTime? _selectedDate;
   double _totalPrice = 0.0;
+  
+  // 2. Variabel untuk menyimpan nama user yang login
+  String _namaUser = 'Pengunjung'; 
 
   @override
   void initState() {
     super.initState();
-    // Mengambil harga dari data JSON dan mengonversinya dengan benar
     final priceString = widget.wisata.harga.replaceAll('.', '');
     _ticketPrice = int.tryParse(priceString) ?? 0;
+    
+    // 3. Panggil fungsi load data user saat halaman dibuka
+    _loadUserData();
+  }
+
+  // Fungsi mengambil data nama dari SharedPreferences
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? savedName = prefs.getString('user_name');
+    
+    if (savedName != null && mounted) {
+      setState(() {
+        _namaUser = savedName;
+      });
+    }
   }
 
   void _calculateTotalPrice() {
@@ -431,8 +449,8 @@ class _BookingPageState extends State<BookingPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => OrderDetailPage(
-                          // Kita hardcode namanya sesuai gambar
-                          namaPemesan: 'Muhammad Arief Adityan',
+                          // 4. Gunakan variabel _namaUser yang sudah diambil dari Login
+                          namaPemesan: _namaUser, 
                           tempatWisata: widget.wisata.nama,
                           tanggalBerkunjung: _selectedDate!,
                           jumlahTiket: totalTickets,

@@ -1,9 +1,11 @@
-// lib/pages/ticket_detail_page.dart
+// lib/pages/riwayat_detail_page.dart
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:intl/intl.dart';
 import '../../models/purchased_ticket_model.dart';
 
+// Halaman ini TIDAK MEMILIKI tombol "Lanjutkan Pembayaran"
 class RiwayatTicketDetailPage extends StatelessWidget {
   final PurchasedTicket ticket;
 
@@ -32,6 +34,7 @@ class RiwayatTicketDetailPage extends StatelessWidget {
             SizedBox(height: height * 0.04),
             _buildTicketDetails(width),
             SizedBox(height: height * 0.03),
+            // TIDAK ADA TOMBOL AKSI DI SINI
             _buildTotalPrice(width, height),
           ],
         ),
@@ -49,7 +52,7 @@ class RiwayatTicketDetailPage extends StatelessWidget {
       elevation: 0,
       centerTitle: true,
       title: const Text(
-        'Riwayat Wisata',
+        'Riwayat Tiket', // Nama halaman
         style: TextStyle(
           color: _whiteColor,
           fontWeight: FontWeight.bold,
@@ -89,7 +92,7 @@ class RiwayatTicketDetailPage extends StatelessWidget {
           ),
           SizedBox(height: height * 0.008),
           Text(
-            ticket.orderDate,
+            _formatDisplayDate(ticket.orderDate),
             style: TextStyle(
               color: _lightTextColor,
               fontSize: width * 0.035,
@@ -185,8 +188,11 @@ class RiwayatTicketDetailPage extends StatelessWidget {
           child: Column(
             children: [
               _buildDetailRow('Nama Pemesan', ticket.userName, width),
-              _buildDetailRow('Tanggal Pesan', ticket.orderDate, width),
-              _buildDetailRow('Jam Pesan', ticket.orderTime, width),
+              _buildDetailRow(
+                  'Tanggal Pesan', _formatDisplayDate(ticket.orderDate), width),
+              // Menampilkan Status
+              _buildDetailRow(
+                  'Status', ticket.status.capitalizeFirst(), width),
               _buildDetailRow('Tempat Wisata', ticket.locationName, width),
               _buildDetailRow('Tanggal Berkunjung', ticket.visitDate, width),
               _buildDetailRow('Jumlah Tiket', ticket.quantity.toString(), width,
@@ -255,7 +261,11 @@ class RiwayatTicketDetailPage extends StatelessWidget {
             ),
           ),
           Text(
-            'Rp ${_formatPrice(ticket.totalPrice.toDouble())}',
+            NumberFormat.currency(
+              locale: 'id_ID',
+              symbol: 'Rp ',
+              decimalDigits: 0,
+            ).format(ticket.totalPrice), // Menggunakan int totalPrice
             style: TextStyle(
               color: _whiteColor,
               fontSize: width * 0.04,
@@ -281,11 +291,13 @@ class RiwayatTicketDetailPage extends StatelessWidget {
     );
   }
 
-  String _formatPrice(double price) {
-    return price.toStringAsFixed(0).replaceAllMapped(
-          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-          (Match m) => '${m[1]}.',
-        );
+  String _formatDisplayDate(String dateString) {
+    try {
+      final date = DateTime.parse(dateString);
+      return DateFormat('d MMMM y', 'id_ID').format(date);
+    } catch (e) {
+      return dateString;
+    }
   }
 
   void _shareTicket() {
@@ -295,5 +307,13 @@ class RiwayatTicketDetailPage extends StatelessWidget {
       'Kode Tiket: ${ticket.ticketId}',
       subject: 'Tiket Wisata Anda',
     );
+  }
+}
+
+// Extension untuk membuat 'pending' -> 'Pending'
+extension StringExtension on String {
+  String capitalizeFirst() {
+    if (isEmpty) return this;
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }

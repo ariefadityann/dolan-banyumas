@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // --- TAMBAHAN 1 ---
 import '../../models/wisata_model.dart'; // Pastikan path import ini benar
 import 'order_detail_ticket.dart'; // Import halaman konfirmasi yang baru
 
@@ -19,6 +20,9 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
   double _totalTarif = 0.0;
   DateTime? _selectedDate;
 
+  // --- TAMBAHAN 2: Variabel untuk menyimpan nama pemesan ---
+  String _namaPemesan = 'Pengunjung';
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +30,22 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
     _tarif = int.tryParse(hargaString) ?? 0;
     _selectedDate = DateTime.now(); // Default tanggal hari ini
     _calculateTotal();
+
+    // --- TAMBAHAN 3: Panggil fungsi load data user ---
+    _loadUserData();
+  }
+
+  // --- TAMBAHAN 4: Fungsi untuk mengambil data nama dari SharedPreferences ---
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    // Pastikan key 'user_name' sesuai dengan yang Anda simpan saat login
+    final String? savedName = prefs.getString('user_name');
+
+    if (savedName != null && mounted) {
+      setState(() {
+        _namaPemesan = savedName;
+      });
+    }
   }
 
   void _calculateTotal() {
@@ -81,6 +101,8 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
           jumlahKendaraan: _jumlahKendaraan,
           totalTarif: _totalTarif,
           tanggalBooking: _selectedDate!,
+          // --- PERBAIKAN 5: Tambahkan parameter namaPemesan ---
+          namaPemesan: _namaPemesan,
         ),
       ),
     );
@@ -94,6 +116,8 @@ class _BookingParkirPageState extends State<BookingParkirPage> {
 
   @override
   Widget build(BuildContext context) {
+    // ... Sisa kode build (UI) Anda tidak perlu diubah ...
+    // ... (Saya salin sisa kodenya di bawah agar lengkap) ...
     return Scaffold(
       backgroundColor: const Color(0xFFFFE6E5),
       appBar: AppBar(

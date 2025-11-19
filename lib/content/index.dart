@@ -1,12 +1,69 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'login.dart'; // Pastikan path ke login.dart benar
+// Sesuaikan path ini ke file IndexPage (halaman utama) Anda
+import '../pages/home/home_screen.dart'; 
 
-class HomePage extends StatelessWidget {
-  // FIX: Menggunakan 'super-parameters' untuk konstruktor yang lebih modern.
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // 1. Tambahkan state loading
+  bool _isCheckingSession = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // 2. Saat halaman ini dibuka, langsung cek status login
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('auth_token');
+    final String? userName = prefs.getString('user_name');
+    final String? userEmail = prefs.getString('user_email');
+
+    if (!mounted) return;
+
+    if (token != null && userName != null && userEmail != null) {
+      // 3. KASUS 1: SUDAH LOGIN
+      // Langsung lempar ke halaman utama (IndexPage)
+      // Pengguna tidak akan melihat halaman "Ayo Mulai"
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => IndexPage(
+            username: userName,
+            email: userEmail,
+          ),
+        ),
+      );
+    } else {
+      // 4. KASUS 2: BELUM LOGIN
+      // Berhenti loading dan tampilkan halaman "Ayo Mulai"
+      setState(() {
+        _isCheckingSession = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // 5. Tampilkan loading spinner selagi session diperiksa
+    if (_isCheckingSession) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    // 6. Jika tidak loading (karena belum login), tampilkan UI "Ayo Mulai"
     return Scaffold(
       body: Stack(
         children: [
@@ -86,8 +143,7 @@ class HomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            // FIX: Menghapus 'const' karena LoginPage adalah StatefulWidget
-                            builder: (context) => LoginPage(),
+                            builder: (context) => const LoginPage(), // Pergi ke Login
                           ),
                         );
                       },
@@ -122,6 +178,7 @@ class HomePage extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       // Pastikan Anda memiliki rute '/register' di main.dart
+                      // atau ganti dengan MaterialPageRoute
                       Navigator.pushNamed(context, '/register');
                     },
                     child: RichText(

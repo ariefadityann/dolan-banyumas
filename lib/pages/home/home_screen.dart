@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Wajib untuk logout
+
+// Sesuaikan path import Login Page Anda
+import '../../content/login.dart'; 
+
 import '../../providers/favorites_provider.dart';
 
 // Models & Services
@@ -99,6 +104,43 @@ class _IndexPageState extends State<IndexPage> {
       }
     }
   }
+
+  // === FUNGSI LOGOUT ===
+  Future<void> _logout() async {
+    // 1. Tampilkan Dialog Konfirmasi
+    final bool? shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Konfirmasi Logout'),
+        content: const Text('Apakah Anda yakin ingin keluar dari aplikasi?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Logout', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldLogout == true) {
+      // 2. Hapus Data Session
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear(); 
+
+      // 3. Navigasi Balik ke Login (dan hapus history halaman sebelumnya)
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+          (Route<dynamic> route) => false,
+        );
+      }
+    }
+  }
+  // =====================
 
   void _onItemTapped(int index) {
     setState(() => _selectedIndex = index);
@@ -201,12 +243,10 @@ class _IndexPageState extends State<IndexPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      // === PERUBAHAN DI SINI ===
                       builder: (context) => AllItemsScreen(
                         category: _selectedCategory,
                         allWisata: _allWisata,
                       ),
-                      // =========================
                     ),
                   );
                 }
@@ -222,11 +262,9 @@ class _IndexPageState extends State<IndexPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      // === PERUBAHAN DI SINI ===
                       builder: (context) => AllItemTerdekat(
                         allWisata: _allWisata,
                       ),
-                      // =========================
                     ),
                   );
                 }
@@ -291,11 +329,8 @@ class _IndexPageState extends State<IndexPage> {
       return const Center(child: Text('Tidak ada data wisata terdekat.'));
     }
 
-    // ===== PERUBAHAN DI SINI =====
-    // Ambil data yang sudah difilter berdasarkan kategori terlebih dahulu
     final List<TempatWisata> filteredList = _filterWisataByCategory(_allWisata);
 
-    // Jika setelah difilter ternyata kosong, tampilkan pesan
     if (filteredList.isEmpty) {
       return const SizedBox(
         height: 100,
@@ -304,7 +339,6 @@ class _IndexPageState extends State<IndexPage> {
       );
     }
 
-    // Lanjutkan proses sorting berdasarkan jarak dari list yang sudah difilter
     filteredList.sort(
         (a, b) => _parseDistance(a.jarak).compareTo(_parseDistance(b.jarak)));
 
@@ -346,8 +380,9 @@ class _IndexPageState extends State<IndexPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                // === EMAIL DITAMPILKAN DI SINI ===
                 Text(
-                  widget.email ?? 'email.pengguna@example.com',
+                  widget.email ?? 'email@banyumas.com', 
                   style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 14,
@@ -378,7 +413,11 @@ class _IndexPageState extends State<IndexPage> {
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text('Logout', style: TextStyle(color: Colors.red)),
-            onTap: () => Navigator.pop(context),
+            // === AKSI LOGOUT ===
+            onTap: () {
+              Navigator.pop(context); // Tutup drawer
+              _logout(); // Panggil fungsi logout
+            },
           ),
         ],
       ),

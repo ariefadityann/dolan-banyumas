@@ -1,7 +1,10 @@
+import 'dart:convert'; // <-- Diperlukan untuk jsonEncode/Decode
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // <-- Diperlukan untuk email
+import 'package:http/http.dart' as http; // <-- Diperlukan untuk API
 import '../../models/wisata_model.dart'; // Pastikan path import ini sama
-import 'payment_method_page.dart'; // <-- IMPORT DITAMBAHKAN
+import 'midtrans_webview.dart'; // <-- Halaman WebView
 
 class KonfirmasiBookingPage extends StatefulWidget {
   final TempatWisata parkir;
@@ -9,6 +12,7 @@ class KonfirmasiBookingPage extends StatefulWidget {
   final int jumlahKendaraan;
   final double totalTarif;
   final DateTime tanggalBooking;
+  final String namaPemesan;
 
   const KonfirmasiBookingPage({
     super.key,
@@ -17,6 +21,7 @@ class KonfirmasiBookingPage extends StatefulWidget {
     required this.jumlahKendaraan,
     required this.totalTarif,
     required this.tanggalBooking,
+    required this.namaPemesan,
   });
 
   @override
@@ -25,6 +30,8 @@ class KonfirmasiBookingPage extends StatefulWidget {
 
 class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
   bool _isAgreed = false;
+  bool _isLoading = false;
+  String _emailPemesanAktif = 'pengunjung@dolanbanyumas.com'; // Default email
 
   // Constants for colors
   static const _backgroundColor = Color(0xFFF9F6F0);
@@ -33,42 +40,59 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
   static const _accentColor = Color(0xFFF44336);
 
   @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? savedEmail = prefs.getString('user_email');
+
+    if (mounted && savedEmail != null) {
+      setState(() {
+        _emailPemesanAktif = savedEmail;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // RESPONSIVE: Get screen width for proportional sizing
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: _backgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          // RESPONSIVE: Use proportional padding
-          padding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.06,
-            vertical: 32.0,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.06,
+                vertical: 32.0,
+              ),
+              child: Column(
+                children: [
+                  _buildHeaderSection(screenWidth),
+                  SizedBox(height: screenWidth * 0.05),
+                  _buildOrderDetailCard(screenWidth),
+                  SizedBox(height: screenWidth * 0.05),
+                  _buildTermsAndConditionsCard(screenWidth),
+                  SizedBox(height: screenWidth * 0.05),
+                  _buildAgreementCheckbox(screenWidth),
+                  const SizedBox(height: 32),
+                  _buildActionButtons(screenWidth),
+                ],
+              ),
+            ),
           ),
-          child: Column(
-            children: [
-              // Header Section
-              _buildHeaderSection(screenWidth),
-              SizedBox(height: screenWidth * 0.05),
-
-              // Order Details Card
-              _buildOrderDetailCard(screenWidth),
-              SizedBox(height: screenWidth * 0.05),
-
-              // Terms & Conditions Card
-              _buildTermsAndConditionsCard(screenWidth),
-              SizedBox(height: screenWidth * 0.05),
-
-              // Agreement Checkbox
-              _buildAgreementCheckbox(screenWidth),
-              const SizedBox(height: 32),
-
-              // Action Buttons
-              _buildActionButtons(screenWidth),
-            ],
-          ),
-        ),
+          if (_isLoading)
+            Container(
+              color: Colors.black54,
+              child: const Center(
+                child: CircularProgressIndicator(color: _primaryColor),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -80,7 +104,6 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
         Icon(
           Icons.check_circle_outline,
           color: _primaryColor,
-          // RESPONSIVE: Proportional icon size
           size: screenWidth * 0.15,
         ),
         const SizedBox(height: 16),
@@ -88,7 +111,6 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
           'Detail Pesanan Parkir',
           textAlign: TextAlign.center,
           style: TextStyle(
-            // RESPONSIVE: Proportional font size
             fontSize: screenWidth * 0.06,
             fontWeight: FontWeight.bold,
             color: _primaryColor,
@@ -103,11 +125,9 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
     final formatters = _buildFormatters();
 
     return Container(
-      // RESPONSIVE: Proportional padding
       padding: EdgeInsets.all(screenWidth * 0.05),
       decoration: BoxDecoration(
         color: _primaryColor,
-        // RESPONSIVE: Proportional border radius
         borderRadius: BorderRadius.circular(screenWidth * 0.04),
         boxShadow: [
           BoxShadow(
@@ -121,7 +141,7 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
         children: [
           _buildDetailRow(
               label: 'Nama Pemesan',
-              value: 'Pengguna',
+              value: widget.namaPemesan,
               screenWidth: screenWidth),
           _buildDetailRow(
               label: 'Tanggal Pesan',
@@ -156,7 +176,6 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  // RESPONSIVE: Proportional font size
                   fontSize: screenWidth * 0.04,
                 ),
               ),
@@ -165,7 +184,6 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  // RESPONSIVE: Proportional font size
                   fontSize: screenWidth * 0.045,
                 ),
               ),
@@ -191,19 +209,16 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
             label,
             style: TextStyle(
               color: Colors.white70,
-              // RESPONSIVE: Proportional font size
               fontSize: screenWidth * 0.035,
             ),
           ),
           const SizedBox(width: 16),
-          // RESPONSIVE: Use Flexible to allow text to wrap if it's too long
           Flexible(
             child: Text(
               value,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
-                // RESPONSIVE: Proportional font size
                 fontSize: screenWidth * 0.035,
               ),
               textAlign: TextAlign.end,
@@ -217,11 +232,9 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
   // Terms & Conditions Card
   Widget _buildTermsAndConditionsCard(double screenWidth) {
     return Container(
-      // RESPONSIVE: Proportional padding
       padding: EdgeInsets.all(screenWidth * 0.05),
       decoration: BoxDecoration(
         color: _secondaryColor,
-        // RESPONSIVE: Proportional border radius
         borderRadius: BorderRadius.circular(screenWidth * 0.04),
         boxShadow: [
           BoxShadow(
@@ -239,7 +252,6 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              // RESPONSIVE: Proportional font size
               fontSize: screenWidth * 0.04,
             ),
           ),
@@ -297,7 +309,6 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
                 'Ya! saya setuju dengan syarat dan ketentuan yang berlaku.',
                 style: TextStyle(
                   color: _primaryColor,
-                  // RESPONSIVE: Proportional font size
                   fontSize: screenWidth * 0.035,
                 ),
               ),
@@ -310,7 +321,6 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
 
   // Action Buttons
   Widget _buildActionButtons(double screenWidth) {
-    // RESPONSIVE: Proportional button height
     final buttonHeight = screenWidth * 0.13;
 
     return Column(
@@ -319,7 +329,7 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
           width: double.infinity,
           height: buttonHeight,
           child: ElevatedButton(
-            onPressed: _isAgreed ? _onContinuePressed : null,
+            onPressed: (_isAgreed && !_isLoading) ? _processPayment : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: _primaryColor,
               foregroundColor: Colors.white,
@@ -329,9 +339,8 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
               elevation: 2,
             ),
             child: Text(
-              'Lanjutkan Pembayaran',
+              _isLoading ? 'Memproses...' : 'Lanjutkan Pembayaran',
               style: TextStyle(
-                // RESPONSIVE: Proportional font size
                 fontSize: screenWidth * 0.04,
                 fontWeight: FontWeight.bold,
               ),
@@ -343,7 +352,7 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
           width: double.infinity,
           height: buttonHeight,
           child: ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
             style: ElevatedButton.styleFrom(
               backgroundColor: _accentColor,
               foregroundColor: Colors.white,
@@ -354,7 +363,6 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
             child: Text(
               'Batalkan',
               style: TextStyle(
-                // RESPONSIVE: Proportional font size
                 fontSize: screenWidth * 0.04,
                 fontWeight: FontWeight.bold,
               ),
@@ -380,17 +388,99 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
     };
   }
 
-  // --- FUNGSI INI DIMODIFIKASI ---
-  void _onContinuePressed() {
-    // Navigasi ke halaman pembayaran
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PaymentMethodPage(
-          totalHarga: widget.totalTarif, // Mengirim total tarif
-        ),
-      ),
-    );
+  // --- FUNGSI DENGAN KEY JSON YANG DIPERBAIKI ---
+  Future<void> _processPayment() async {
+    setState(() => _isLoading = true);
+
+    const String apiUrl = 'https://unwild-uninfected-victoria.ngrok-free.dev/api/dolanbanyumas/midtrans/booking-parkir';
+
+    try {
+      // --- PERBAIKAN KEY JSON DISINI ---
+      final Map<String, dynamic> requestBody = {
+        // Key untuk mencari user_id (diasumsikan backend menangani ini)
+        'first_name': widget.namaPemesan,
+        'email': _emailPemesanAktif,
+
+        // Key yang disamakan dengan nama kolom tabel 'parkir_bookings'
+        'total_harga': widget.totalTarif,         // BUKAN 'gross_amount'
+        'parking_type': 'Parkir: ${widget.parkir.nama}', // BUKAN 'wisata_name'
+        'tanggal_booking': DateFormat('yyyy-MM-dd').format(widget.tanggalBooking), // BUKAN 'visit_date'
+        'jumlah': widget.jumlahKendaraan,      // BUKAN 'quantity'
+        'plat_nomor': widget.nomorPlat,       // Ini sudah benar
+      };
+      // --- AKHIR PERBAIKAN ---
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(requestBody),
+      );
+
+      if (!mounted) return;
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['status'] == 'success') {
+          final String redirectUrl = data['redirect_url'];
+
+          // Navigasi ke WebView
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MidtransWebViewPage(url: redirectUrl),
+            ),
+          );
+
+          if (!mounted) return;
+
+          // Handle hasil setelah dari webview
+          if (result == 'success') {
+            final messenger = ScaffoldMessenger.of(context);
+            // Kembali ke halaman utama (home)
+            Navigator.popUntil(context, (route) => route.isFirst);
+            messenger.showSnackBar(
+              const SnackBar(
+                content: Text(
+                    "Pesanan parkir berhasil dibuat!"),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 3),
+              ),
+            );
+          }
+        } else {
+          throw Exception(
+              'Gagal mendapatkan link pembayaran: ${data['message']}');
+        }
+      } else {
+        // --- PERBAIKAN ERROR HANDLING UNTUK 422 ---
+        final errorBody = jsonDecode(response.body);
+        String errorMessage = errorBody['message'] ?? 'Data tidak valid';
+        
+        // Cek jika ada detail error validasi dari Laravel
+        if (errorBody.containsKey('errors')) {
+          // Ambil pesan error validasi pertama
+          errorMessage = errorBody['errors'].entries.first.value[0];
+        }
+        throw Exception('Server Error: ${response.statusCode}. Pesan: $errorMessage');
+        // --- AKHIR PERBAIKAN ERROR HANDLING ---
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Terjadi kesalahan: $e"),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 }
 
@@ -398,7 +488,6 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
 class _TermSection extends StatelessWidget {
   final String title;
   final String content;
-  // RESPONSIVE: Accept screenWidth
   final double screenWidth;
 
   const _TermSection({
@@ -417,7 +506,6 @@ class _TermSection extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            // RESPONSIVE: Proportional font size
             fontSize: screenWidth * 0.035,
           ),
         ),
@@ -426,7 +514,6 @@ class _TermSection extends StatelessWidget {
           content,
           style: TextStyle(
             color: Colors.white70,
-            // RESPONSIVE: Proportional font size
             fontSize: screenWidth * 0.032,
             height: 1.4,
           ),
