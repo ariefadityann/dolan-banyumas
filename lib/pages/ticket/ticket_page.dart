@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // 1. Tambah Import Ini
 import '../../models/wisata_model.dart';
 import '../../widgets/wisata_card.dart';
 import 'booking_page.dart';
@@ -34,10 +35,33 @@ class _TicketPageState extends State<TicketPage> {
   String _selectedFilter = 'Pesan';
   final List<String> _filters = ['Pesan', 'Parkir', 'Tiket', 'Riwayat'];
 
+  // 2. Variabel untuk menyimpan nama user
+  String _namaUser = 'Pengunjung'; 
+
   @override
   void initState() {
     super.initState();
+    _loadUserData(); // 3. Panggil fungsi load data
     _filterDataForPage();
+  }
+
+  // 4. Fungsi untuk mengambil Nama dari Shared Preferences
+  Future<void> _loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? savedName = prefs.getString('user_name');
+
+    // === PERBAIKAN DI SINI ===
+    // Validasi: Pastikan tidak null, tidak kosong, dan BUKAN tulisan 'undefined'
+    if (savedName != null && 
+        savedName.isNotEmpty && 
+        savedName.toLowerCase() != 'undefined' && 
+        savedName.toLowerCase() != 'null' &&
+        mounted) {
+      setState(() {
+        _namaUser = savedName; 
+      });
+    }
+    // Jika 'undefined', dia akan tetap pakai default 'Pengunjung'
   }
 
   @override
@@ -49,20 +73,14 @@ class _TicketPageState extends State<TicketPage> {
   }
 
   void _filterDataForPage() {
-    // Filter ini tetap sama
     _ticketableWisata = widget.allWisata.where((wisata) {
       return wisata.deskripsi.toLowerCase() == 'wisata alam';
     }).toList();
 
-    // --- PERUBAHAN DI SINI ---
-    // Logika rating telah dihapus.
-    // Sekarang, 'populer' berarti semua 'wisata alam'.
     _popularWisata = widget.allWisata.where((wisata) {
-      // final bool isPopular = wisata.rating >= 4.0; // <-- BARIS INI DIHAPUS
       final bool isWisataAlam = wisata.deskripsi.toLowerCase() == 'wisata alam';
-      return isWisataAlam; // <-- HANYA MENGEMBALIKAN 'isWisataAlam'
+      return isWisataAlam; 
     }).toList();
-    // --- AKHIR PERUBAHAN ---
 
     if (mounted) {
       setState(() {});
@@ -88,12 +106,10 @@ class _TicketPageState extends State<TicketPage> {
 
   @override
   Widget build(BuildContext context) {
-    // RESPONSIVE: Get screen dimensions to make UI proportional
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: _backgroundColor,
-      // RESPONSIVE: Use SafeArea to avoid system UI like notches
       body: SafeArea(
         child: Column(
           children: [
@@ -123,7 +139,6 @@ class _TicketPageState extends State<TicketPage> {
   // Header Section with Greeting and Logo
   Widget _buildHeaderSection(double screenWidth) {
     return Padding(
-      // RESPONSIVE: Use proportional padding
       padding: EdgeInsets.symmetric(
         horizontal: screenWidth * 0.05,
         vertical: 20,
@@ -131,35 +146,34 @@ class _TicketPageState extends State<TicketPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // RESPONSIVE: Use Expanded to make the text column flexible
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // 5. Tampilkan nama user di sini
                 Text(
-                  'Haii, Iyan 👋',
+                  'Haii, $_namaUser 👋', 
                   style: TextStyle(
                     color: Colors.white,
-                    // RESPONSIVE: Proportional font size
                     fontSize: screenWidth * 0.055,
                     fontWeight: FontWeight.bold,
                   ),
+                  overflow: TextOverflow.ellipsis, // Jaga-jaga jika nama terlalu panjang
+                  maxLines: 1,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'Mau kemana hari ini',
                   style: TextStyle(
                     color: Colors.white,
-                    // RESPONSIVE: Proportional font size
                     fontSize: screenWidth * 0.04,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 16), // Add spacing between text and logo
+          const SizedBox(width: 16), 
           Container(
-            // RESPONSIVE: Proportional width and height
             width: screenWidth * 0.12,
             height: screenWidth * 0.12,
             decoration: BoxDecoration(
@@ -173,13 +187,15 @@ class _TicketPageState extends State<TicketPage> {
               ],
             ),
             child: Image.asset(
-              'assets/img/logo.png', // Sesuaikan path logo Anda
+              'assets/img/logo.png', 
             ),
           ),
         ],
       ),
     );
   }
+
+  // ... (SISA KODE KE BAWAH TIDAK ADA PERUBAHAN) ...
 
   // Main Content Section
   Widget _buildContentSection() {
@@ -188,7 +204,6 @@ class _TicketPageState extends State<TicketPage> {
       children: [
         // Filter Chips
         Padding(
-          // RESPONSIVE: Proportional padding
           padding: EdgeInsets.fromLTRB(
               screenWidth * 0.04, 24, screenWidth * 0.04, 0),
           child: _buildFilterChips(),
@@ -218,7 +233,6 @@ class _TicketPageState extends State<TicketPage> {
         ],
       ),
       child: Row(
-        // RESPONSIVE: Expanded ensures chips fill the width equally. This was already correct.
         children: _filters
             .map((filter) => Expanded(child: _buildFilterChip(filter)))
             .toList(),
@@ -226,7 +240,6 @@ class _TicketPageState extends State<TicketPage> {
     );
   }
 
-  // Individual Filter Chip
   // Individual Filter Chip
   Widget _buildFilterChip(String label) {
     final bool isSelected = _selectedFilter == label;
@@ -240,9 +253,8 @@ class _TicketPageState extends State<TicketPage> {
           color: isSelected ? const Color(0xFFFFE6E5) : Colors.transparent,
           borderRadius: BorderRadius.circular(_filterBorderRadius),
         ),
-        // === PERUBAHAN DI SINI ===
         child: FittedBox(
-          fit: BoxFit.scaleDown, // Ensures text only shrinks, not grows
+          fit: BoxFit.scaleDown,
           child: Text(
             label,
             textAlign: TextAlign.center,
@@ -253,7 +265,6 @@ class _TicketPageState extends State<TicketPage> {
             ),
           ),
         ),
-        // =========================
       ),
     );
   }
@@ -284,7 +295,6 @@ class _TicketPageState extends State<TicketPage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return SingleChildScrollView(
-      // RESPONSIVE: Proportional padding
       padding: EdgeInsets.all(screenWidth * 0.05),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,16 +302,13 @@ class _TicketPageState extends State<TicketPage> {
           Text(
             'Pesan Tiket',
             style: TextStyle(
-              // RESPONSIVE: Proportional font size
               fontSize: screenWidth * 0.055,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
             ),
           ),
-          // RESPONSIVE: Proportional spacing
           SizedBox(height: screenHeight * 0.025),
           _buildSearchAutocomplete(),
-          // RESPONSIVE: Proportional spacing
           SizedBox(height: screenHeight * 0.03),
           _buildPopularSection(),
         ],
@@ -312,7 +319,6 @@ class _TicketPageState extends State<TicketPage> {
   // Search Autocomplete Widget
   Widget _buildSearchAutocomplete() {
     final screenWidth = MediaQuery.of(context).size.width;
-    // RESPONSIVE: Calculate horizontal padding to correctly size the options view
     final horizontalPadding = screenWidth * 0.05;
 
     return Autocomplete<TempatWisata>(
@@ -365,7 +371,6 @@ class _TicketPageState extends State<TicketPage> {
             elevation: 4.0,
             borderRadius: BorderRadius.circular(12),
             child: SizedBox(
-              // RESPONSIVE: Set width based on screen width minus padding
               width: screenWidth - (horizontalPadding * 2),
               child: ListView.builder(
                 padding: EdgeInsets.zero,
@@ -400,13 +405,11 @@ class _TicketPageState extends State<TicketPage> {
         Text(
           'Destinasi Populer',
           style: TextStyle(
-            // RESPONSIVE: Proportional font size
             fontSize: screenWidth * 0.05,
             fontWeight: FontWeight.bold,
             color: Colors.black87,
           ),
         ),
-        // RESPONSIVE: Proportional spacing
         SizedBox(height: screenHeight * 0.02),
         _popularWisata.isEmpty
             ? _buildEmptyState("Tidak ada destinasi populer yang ditemukan")
@@ -442,7 +445,6 @@ class _TicketPageState extends State<TicketPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // RESPONSIVE: Proportional icon size
           Icon(Icons.search_off,
               size: screenWidth * 0.15, color: Colors.grey[400]),
           const SizedBox(height: 16),
@@ -462,7 +464,6 @@ class _TicketPageState extends State<TicketPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // RESPONSIVE: Proportional icon size
           Icon(Icons.construction,
               size: screenWidth * 0.15, color: Colors.grey[400]),
           const SizedBox(height: 16),
@@ -470,7 +471,6 @@ class _TicketPageState extends State<TicketPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Text(
               'Fitur "$_selectedFilter" sedang dalam pengembangan',
-              // RESPONSIVE: Proportional font size
               style: TextStyle(
                   fontSize: screenWidth * 0.045, color: Colors.grey[700]),
               textAlign: TextAlign.center,

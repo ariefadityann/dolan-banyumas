@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'registrasi.dart';
-import '../pages/home/home_screen.dart';
+import '../pages/home/home_screen.dart'; // Pastikan path ini sesuai struktur folder Anda
 
 class LoginPage extends StatefulWidget {
-  // Menggunakan super-parameters untuk konstruktor yang modern
   const LoginPage({super.key});
 
   @override
@@ -11,29 +13,204 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // State variable untuk mengubah visibilitas password
   bool _isPasswordVisible = false;
+  bool _isLoading = false;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loginUser() async {
+    if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Username dan Password wajib diisi')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Ganti URL ini dengan IP Address komputer Anda jika menggunakan Emulator (misal: 10.0.2.2 untuk Android Emulator)
+    // atau IP LAN jika menggunakan HP fisik (misal: 192.168.1.x)
+    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/login';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'username': _usernameController.text,
+          'password': _passwordController.text,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        // 1. Ambil data User & Token dari Response API
+        // Pastikan key JSON ('nama_lengkap', 'email') sesuai dengan response API Laravel Anda
+        final String namaPengguna = data['user']['nama_lengkap'] ?? 'Pengguna';
+        final String emailPengguna = data['user']['email'] ?? 'email@banyumas.com';
+        final String token = data['token'];
+
+        // 2. Simpan ke SharedPreferences (Session)
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('auth_token', token);
+        await prefs.setString('user_name', namaPengguna);
+        await prefs.setString('user_email', emailPengguna);
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login Berhasil!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+
+          // 3. Pindah ke IndexPage sambil membawa data nama & email
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => IndexPage(
+                username: namaPengguna,
+                email: emailPengguna, // <-- Email dikirim di sini
+              ),
+            ),
+          );
+        }
+      } else {
+        final errorData = jsonDecode(response.body);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Gagal Login: ${errorData['message'] ?? 'Cek kredensial Anda'}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error koneksi: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Widget _buildTextField(
+      {required String label,
+      required String hint,
+      required TextEditingController controller}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          controller: controller,
+          style: const TextStyle(color: Colors.black87),
+          decoration: InputDecoration(
+            hintText: hint,
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPasswordTextField({required TextEditingController controller}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Password',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          controller: controller,
+          obscureText: !_isPasswordVisible,
+          style: const TextStyle(color: Colors.black87),
+          decoration: InputDecoration(
+            hintText: 'Password',
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            suffixIcon: IconButton(
+              icon: Icon(
+                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                color: Colors.grey,
+              ),
+              onPressed: () {
+                setState(() {
+                  _isPasswordVisible = !_isPasswordVisible;
+                });
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Mencegah UI bergeser saat keyboard muncul
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Gambar Latar Belakang dan Teks Overlay
+          // Background Image
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                    'assets/img/background.jpg'), // Pastikan path ini benar
+                image: AssetImage('assets/img/background.jpg'),
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
               ),
             ),
             child: Container(
-              // Menambahkan lapisan gelap tipis agar teks lebih mudah dibaca
               color: Colors.black.withOpacity(0.3),
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 80.0),
@@ -45,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                       'Jelajahi Banyumas Bersama.',
                       style: TextStyle(
                         fontFamily: 'SFProText',
-                        fontSize: 52,
+                        fontSize: 40, // Adjusted size slightly
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         height: 1.2,
@@ -66,8 +243,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-
-          // Form Login
+          // Login Form Container
           Align(
             alignment: Alignment.bottomCenter,
             child: SingleChildScrollView(
@@ -93,15 +269,21 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    _buildTextField(label: 'Username', hint: 'Username'),
+                    _buildTextField(
+                      label: 'Username',
+                      hint: 'Username',
+                      controller: _usernameController,
+                    ),
                     const SizedBox(height: 16),
-                    _buildPasswordTextField(),
+                    _buildPasswordTextField(
+                      controller: _passwordController,
+                    ),
                     const SizedBox(height: 8),
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: () {
-                          // TODO: Implementasi logika Lupa Password
+                          // Implementasi Lupa Password
                         },
                         child: const Text(
                           'Lupa Password?',
@@ -113,13 +295,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const IndexPage()),
-                          );
-                        },
+                        onPressed: _isLoading ? null : _loginUser,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF44336),
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -127,10 +303,20 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
-                          'Masuk',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Text(
+                                'Masuk',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white),
+                              ),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -168,79 +354,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ],
       ),
-    );
-  }
-
-  // Widget helper untuk membuat text field standar
-  Widget _buildTextField({required String label, required String hint}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          decoration: InputDecoration(
-            hintText: hint,
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Widget helper khusus untuk field password
-  Widget _buildPasswordTextField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Password',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          obscureText: !_isPasswordVisible,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            suffixIcon: IconButton(
-              icon: Icon(
-                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                color: Colors.grey,
-              ),
-              onPressed: () {
-                // Memperbarui state untuk mengubah visibilitas password
-                setState(() {
-                  _isPasswordVisible = !_isPasswordVisible;
-                });
-              },
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

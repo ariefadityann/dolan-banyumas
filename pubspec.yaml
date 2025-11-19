@@ -40,13 +40,14 @@ dependencies:
   url_launcher: ^6.2.6   # Untuk membuka link/peta eksternal
   latlong2: ^0.9.0   
   shared_preferences: ^2.2.3      
-  http: ^1.2.1
+  http: ^1.6.0
   intl: ^0.20.2
   qr_flutter: ^4.1.0
   share_plus: ^10.0.0
   provider: ^6.1.2
   geolocator: ^11.0.0 # <-- Untuk mendapatkan lokasi GPS pengguna
   geocoding: ^3.0.0  # <-- Untuk mengubah koordinat menjadi alamat (opsional)
+  webview_flutter: ^4.7.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

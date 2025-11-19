@@ -1,4 +1,6 @@
+import 'dart:convert'; // Untuk jsonDecode
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http; // Import http
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -10,6 +12,99 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+  bool _isLoading = false; // Untuk indikator loading
+
+  // 1. DEFINISI CONTROLLER
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _waController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Bersihkan controller ketika halaman ditutup
+    _usernameController.dispose();
+    _nameController.dispose();
+    _waController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  // 2. FUNGSI UNTUK HIT API
+  Future<void> _registerUser() async {
+    // Validasi dasar
+    if (_usernameController.text.isEmpty ||
+        _nameController.text.isEmpty ||
+        _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Mohon lengkapi semua data')),
+      );
+      return;
+    }
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password konfirmasi tidak sama')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/register';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'username': _usernameController.text,
+          'nama_lengkap': _nameController.text,
+          'no_wa': _waController.text,
+          'password': _passwordController.text,
+          'password_confirmation': _confirmPasswordController.text,
+        }),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // BERHASIL
+        final data = jsonDecode(response.body);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Registrasi Berhasil: ${data['message'] ?? 'Silahkan login'}')),
+          );
+          Navigator.pop(context); // Kembali ke halaman login
+        }
+      } else {
+        // GAGAL (Validasi server dll)
+        final errorData = jsonDecode(response.body);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Gagal: ${errorData['message'] ?? 'Terjadi kesalahan'}')),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error koneksi: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,21 +151,32 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 16),
                     _buildSectionDivider('Data'),
                     const SizedBox(height: 16),
-                    _buildTextField(label: 'Username', hint: 'Username'),
+                    // 3. PASANG CONTROLLER KE TEXTFIELD
+                    _buildTextField(
+                      label: 'Username', 
+                      hint: 'Username', 
+                      controller: _usernameController
+                    ),
                     const SizedBox(height: 16),
                     _buildTextField(
-                        label: 'Nama Lengkap', hint: 'Nama Lengkap Anda'),
+                      label: 'Nama Lengkap', 
+                      hint: 'Nama Lengkap Anda', 
+                      controller: _nameController
+                    ),
                     const SizedBox(height: 16),
                     _buildTextField(
-                        label: 'No WA',
-                        hint: 'Contoh: 081234567890',
-                        isNumeric: true),
+                      label: 'No WA',
+                      hint: 'Contoh: 081234567890',
+                      isNumeric: true,
+                      controller: _waController
+                    ),
                     const SizedBox(height: 16),
                     _buildSectionDivider('Password'),
                     const SizedBox(height: 16),
                     _buildPasswordTextField(
                       label: 'Password',
                       isPasswordVisible: _isPasswordVisible,
+                      controller: _passwordController,
                       onToggleVisibility: () {
                         setState(() {
                           _isPasswordVisible = !_isPasswordVisible;
@@ -81,10 +187,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     _buildPasswordTextField(
                       label: 'Ulangi Password',
                       isPasswordVisible: _isConfirmPasswordVisible,
+                      controller: _confirmPasswordController,
                       onToggleVisibility: () {
                         setState(() {
-                          _isConfirmPasswordVisible =
-                              !_isConfirmPasswordVisible;
+                          _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
                         });
                       },
                     ),
@@ -92,8 +198,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          // TODO: Implementasi logika pendaftaran
+                        onPressed: _isLoading ? null : () {
+                           // PANGGIL FUNGSI REGISTER
+                           _registerUser();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF44336),
@@ -102,19 +209,23 @@ class _RegisterPageState extends State<RegisterPage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
-                          'Daftar',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: _isLoading 
+                          ? const SizedBox(
+                              height: 20, width: 20, 
+                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                            )
+                          : const Text(
+                              'Daftar',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
                       ),
                     ),
                     const SizedBox(height: 24),
                     GestureDetector(
                       onTap: () {
-                        // Kembali ke halaman login
                         Navigator.pop(context);
                       },
                       child: RichText(
@@ -162,8 +273,13 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildTextField(
-      {required String label, required String hint, bool isNumeric = false}) {
+  // MODIFIKASI: Tambahkan parameter controller
+  Widget _buildTextField({
+    required String label, 
+    required String hint, 
+    required TextEditingController controller, // Tambahan
+    bool isNumeric = false
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -176,7 +292,9 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         const SizedBox(height: 8),
         TextField(
+          controller: controller, // Pasang disini
           keyboardType: isNumeric ? TextInputType.phone : TextInputType.text,
+          style: const TextStyle(color: Colors.black87),
           decoration: InputDecoration(
             hintText: hint,
             filled: true,
@@ -193,9 +311,11 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  // MODIFIKASI: Tambahkan parameter controller
   Widget _buildPasswordTextField({
     required String label,
     required bool isPasswordVisible,
+    required TextEditingController controller, // Tambahan
     required VoidCallback onToggleVisibility,
   }) {
     return Column(
@@ -210,7 +330,9 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         const SizedBox(height: 8),
         TextField(
+          controller: controller, // Pasang disini
           obscureText: !isPasswordVisible,
+          style: const TextStyle(color: Colors.black87),
           decoration: InputDecoration(
             hintText: 'Password',
             filled: true,
