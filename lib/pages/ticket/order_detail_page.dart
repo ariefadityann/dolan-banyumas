@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart'; 
+import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,89 +68,87 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   }
 
   Future<void> _processPayment() async {
-  setState(() => _isLoading = true);
+    setState(() => _isLoading = true);
 
-  const String apiUrl =
-      'https://unwild-uninfected-victoria.ngrok-free.dev/api/dolanbanyumas/midtrans/transaction';
+    const String apiUrl =
+        'https://unentwined-lupe-superornamentally.ngrok-free.dev/api/dolanbanyumas/midtrans/transaction';
 
-  try {
-    final Map<String, dynamic> requestBody = {
-      'gross_amount': widget.totalHarga,
-      'first_name': _namaPemesanAktif,
-      'email': _emailPemesanAktif,
-      'wisata_name': widget.tempatWisata,
-      'visit_date': DateFormat('yyyy-MM-dd').format(widget.tanggalBerkunjung),
-      'quantity': widget.jumlahTiket,
-    };
+    try {
+      final Map<String, dynamic> requestBody = {
+        'gross_amount': widget.totalHarga,
+        'first_name': _namaPemesanAktif,
+        'email': _emailPemesanAktif,
+        'wisata_name': widget.tempatWisata,
+        'visit_date': DateFormat('yyyy-MM-dd').format(widget.tanggalBerkunjung),
+        'quantity': widget.jumlahTiket,
+      };
 
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: jsonEncode(requestBody),
-    );
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode(requestBody),
+      );
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    if (response.statusCode != 200) {
-      throw Exception("Server error: ${response.statusCode}");
-    }
+      if (response.statusCode != 200) {
+        throw Exception("Server error: ${response.statusCode}");
+      }
 
-    final data = jsonDecode(response.body);
+      final data = jsonDecode(response.body);
 
-    if (data['status'] != 'success') {
-      throw Exception("Midtrans error: ${data['message']}");
-    }
+      if (data['status'] != 'success') {
+        throw Exception("Midtrans error: ${data['message']}");
+      }
 
-    final String redirectUrl = data['redirect_url'];
+      final String redirectUrl = data['redirect_url'];
 
-    // --------------------------
-    // PLATFORM CHECKING
-    // --------------------------
+      // --------------------------
+      // PLATFORM CHECKING
+      // --------------------------
 
-    if (kIsWeb) {
-      // WEB → buka tab baru
-      final Uri url = Uri.parse(redirectUrl);
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-      return;
-    }
+      if (kIsWeb) {
+        // WEB → buka tab baru
+        final Uri url = Uri.parse(redirectUrl);
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+        return;
+      }
 
-    // ANDROID → buka WebView
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MidtransWebViewPage(url: redirectUrl),
-      ),
-    );
-
-    if (!mounted) return;
-
-    if (result == "success") {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Pembayaran berhasil!"),
-          backgroundColor: Colors.green,
+      // ANDROID → buka WebView
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MidtransWebViewPage(url: redirectUrl),
         ),
       );
-      Navigator.pop(context);
-    }
 
-  } catch (e) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error: $e"),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (!mounted) return;
+
+      if (result == "success") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Pembayaran berhasil!"),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error: $e"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
-  } finally {
-    if (mounted) setState(() => _isLoading = false);
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -278,13 +276,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           color: _secondaryColor,
           borderRadius: BorderRadius.circular(_cardBorderRadius),
           boxShadow: [
-             BoxShadow(
-                color: Colors.black12, // PERBAIKAN: Mengganti withOpacity
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-          ]
-      ),
+            BoxShadow(
+              color: Colors.black12, // PERBAIKAN: Mengganti withOpacity
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ]),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -311,16 +308,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   Widget _buildAgreementCheckbox() {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, 
+          color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-           boxShadow: [
-             BoxShadow(
-                color: Colors.black.withOpacity(0.05), // Ini juga bisa diganti
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-           ]
-          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05), // Ini juga bisa diganti
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ]),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         child: Row(

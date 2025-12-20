@@ -392,7 +392,8 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
   Future<void> _processPayment() async {
     setState(() => _isLoading = true);
 
-    const String apiUrl = 'https://unwild-uninfected-victoria.ngrok-free.dev/api/dolanbanyumas/midtrans/booking-parkir';
+    const String apiUrl =
+        'https://unentwined-lupe-superornamentally.ngrok-free.dev/api/dolanbanyumas/midtrans/booking-parkir';
 
     try {
       // --- PERBAIKAN KEY JSON DISINI ---
@@ -402,11 +403,12 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
         'email': _emailPemesanAktif,
 
         // Key yang disamakan dengan nama kolom tabel 'parkir_bookings'
-        'total_harga': widget.totalTarif,         // BUKAN 'gross_amount'
+        'total_harga': widget.totalTarif, // BUKAN 'gross_amount'
         'parking_type': 'Parkir: ${widget.parkir.nama}', // BUKAN 'wisata_name'
-        'tanggal_booking': DateFormat('yyyy-MM-dd').format(widget.tanggalBooking), // BUKAN 'visit_date'
-        'jumlah': widget.jumlahKendaraan,      // BUKAN 'quantity'
-        'plat_nomor': widget.nomorPlat,       // Ini sudah benar
+        'tanggal_booking': DateFormat('yyyy-MM-dd')
+            .format(widget.tanggalBooking), // BUKAN 'visit_date'
+        'jumlah': widget.jumlahKendaraan, // BUKAN 'quantity'
+        'plat_nomor': widget.nomorPlat, // Ini sudah benar
       };
       // --- AKHIR PERBAIKAN ---
 
@@ -444,8 +446,7 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
             Navigator.popUntil(context, (route) => route.isFirst);
             messenger.showSnackBar(
               const SnackBar(
-                content: Text(
-                    "Pesanan parkir berhasil dibuat!"),
+                content: Text("Pesanan parkir berhasil dibuat!"),
                 backgroundColor: Colors.green,
                 duration: Duration(seconds: 3),
               ),
@@ -459,13 +460,14 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
         // --- PERBAIKAN ERROR HANDLING UNTUK 422 ---
         final errorBody = jsonDecode(response.body);
         String errorMessage = errorBody['message'] ?? 'Data tidak valid';
-        
+
         // Cek jika ada detail error validasi dari Laravel
         if (errorBody.containsKey('errors')) {
           // Ambil pesan error validasi pertama
           errorMessage = errorBody['errors'].entries.first.value[0];
         }
-        throw Exception('Server Error: ${response.statusCode}. Pesan: $errorMessage');
+        throw Exception(
+            'Server Error: ${response.statusCode}. Pesan: $errorMessage');
         // --- AKHIR PERBAIKAN ERROR HANDLING ---
       }
     } catch (e) {
