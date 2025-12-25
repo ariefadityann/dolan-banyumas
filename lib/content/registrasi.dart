@@ -1,6 +1,7 @@
 import 'dart:convert'; // Untuk jsonDecode
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http; // Import http
+import 'verify_otp.dart'; // Import halaman verifikasi OTP
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -16,7 +17,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // 1. DEFINISI CONTROLLER
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController(); // Ganti nama_lengkap dengan email
   final TextEditingController _waController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -25,7 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     // Bersihkan controller ketika halaman ditutup
     _usernameController.dispose();
-    _nameController.dispose();
+    _emailController.dispose(); // Ganti _nameController dengan _emailController
     _waController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -36,10 +37,18 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> _registerUser() async {
     // Validasi dasar
     if (_usernameController.text.isEmpty ||
-        _nameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
         _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Mohon lengkapi semua data')),
+      );
+      return;
+    }
+
+    // Validasi format email
+    if (!_emailController.text.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Format email tidak valid')),
       );
       return;
     }
@@ -55,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _isLoading = true;
     });
 
-    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/register';
+    const String url = 'http://127.0.0.1:8000/api/dolanbanyumas/register';
 
     try {
       final response = await http.post(
@@ -66,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
         },
         body: jsonEncode({
           'username': _usernameController.text,
-          'nama_lengkap': _nameController.text,
+          'email': _emailController.text, // Ganti nama_lengkap dengan email
           'no_wa': _waController.text,
           'password': _passwordController.text,
           'password_confirmation': _confirmPasswordController.text,
@@ -74,13 +83,22 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // BERHASIL
+        // BERHASIL - Arahkan ke halaman verifikasi OTP
         final data = jsonDecode(response.body);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Registrasi Berhasil: ${data['message'] ?? 'Silahkan login'}')),
+            SnackBar(
+              content: Text(data['message'] ?? 'Kode OTP telah dikirim ke email Anda'),
+              backgroundColor: Colors.green,
+            ),
           );
-          Navigator.pop(context); // Kembali ke halaman login
+          // Navigate to OTP verification page
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VerifyOTPPage(email: _emailController.text),
+            ),
+          );
         }
       } else {
         // GAGAL (Validasi server dll)
@@ -159,9 +177,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     const SizedBox(height: 16),
                     _buildTextField(
-                      label: 'Nama Lengkap', 
-                      hint: 'Nama Lengkap Anda', 
-                      controller: _nameController
+                      label: 'Email', 
+                      hint: 'contoh@email.com', 
+                      controller: _emailController,
+                      isEmail: true
                     ),
                     const SizedBox(height: 16),
                     _buildTextField(
@@ -278,7 +297,8 @@ class _RegisterPageState extends State<RegisterPage> {
     required String label, 
     required String hint, 
     required TextEditingController controller, // Tambahan
-    bool isNumeric = false
+    bool isNumeric = false,
+    bool isEmail = false
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,7 +313,11 @@ class _RegisterPageState extends State<RegisterPage> {
         const SizedBox(height: 8),
         TextField(
           controller: controller, // Pasang disini
-          keyboardType: isNumeric ? TextInputType.phone : TextInputType.text,
+          keyboardType: isNumeric 
+              ? TextInputType.phone 
+              : isEmail 
+                  ? TextInputType.emailAddress 
+                  : TextInputType.text,
           style: const TextStyle(color: Colors.black87),
           decoration: InputDecoration(
             hintText: hint,
