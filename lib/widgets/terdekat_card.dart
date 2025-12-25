@@ -37,11 +37,24 @@ class TerdekatCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                wisata.gambarUrl,
+              child: Container(
                 width: 70,
                 height: 70,
-                fit: BoxFit.cover,
+                decoration: BoxDecoration(
+                  image: wisata.gambarUrl.isNotEmpty
+                      ? DecorationImage(
+                          image: NetworkImage(wisata.gambarUrl),
+                          fit: BoxFit.cover,
+                          onError: (error, stackTrace) {
+                            print('❌ Image Error: $error');
+                          },
+                        )
+                      : null,
+                  color: wisata.gambarUrl.isEmpty ? Colors.grey[200] : null,
+                ),
+                child: wisata.gambarUrl.isEmpty
+                    ? Icon(Icons.broken_image, color: Colors.grey)
+                    : null,
               ),
             ),
             const SizedBox(width: 16),

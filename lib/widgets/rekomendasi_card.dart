@@ -172,16 +172,24 @@ class RekomendasiCard extends StatelessWidget {
                     ]),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
-                    wisata.gambarUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: Icon(Icons.image_not_supported,
-                            color: Colors.grey[400]),
-                      );
-                    },
+                  child: Container(
+                    width: 120,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      image: wisata.gambarUrl.isNotEmpty
+                          ? DecorationImage(
+                              image: NetworkImage(wisata.gambarUrl),
+                              fit: BoxFit.cover,
+                              onError: (error, stackTrace) {
+                                print('❌ Image Error: $error');
+                              },
+                            )
+                          : null,
+                      color: wisata.gambarUrl.isEmpty ? Colors.grey[200] : null,
+                    ),
+                    child: wisata.gambarUrl.isEmpty
+                        ? Icon(Icons.broken_image, color: Colors.grey[400])
+                        : null,
                   ),
                 ),
               ),

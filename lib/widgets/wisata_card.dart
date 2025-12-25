@@ -18,22 +18,29 @@ class WisataCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       child: Stack(
         children: [
-          // Gambar Background
-          Image.asset(
-            wisata.gambarUrl,
+          // Gambar Background dari Network (API) - Flutter Web Compatible
+          Container(
             height: 180,
             width: double.infinity,
-            fit: BoxFit.cover,
-            alignment: Alignment.topCenter,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                height: 180,
-                color: Colors.grey[300],
-                alignment: Alignment.center,
-                child:
-                    const Icon(Icons.image_not_supported, color: Colors.grey),
-              );
-            },
+            decoration: BoxDecoration(
+              image: wisata.gambarUrl.isNotEmpty
+                  ? DecorationImage(
+                      image: NetworkImage(wisata.gambarUrl),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                      onError: (error, stackTrace) {
+                        print('❌ Image Load Error: $error');
+                        print('   URL: ${wisata.gambarUrl}');
+                      },
+                    )
+                  : null,
+              color: wisata.gambarUrl.isEmpty ? Colors.grey[300] : null,
+            ),
+            child: wisata.gambarUrl.isEmpty
+                ? const Center(
+                    child: Icon(Icons.broken_image, color: Colors.grey, size: 40),
+                  )
+                : null,
           ),
           // Gradient Overlay
           Positioned.fill(
