@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
     // Ganti URL ini dengan IP Address komputer Anda jika menggunakan Emulator (misal: 10.0.2.2 untuk Android Emulator)
     // atau IP LAN jika menggunakan HP fisik (misal: 192.168.1.x)
-    const String url = 'http://127.0.0.1:8000/api/dolanbanyumas/login';
+    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/login';
 
     try {
       final response = await http.post(
@@ -55,23 +55,19 @@ class _LoginPageState extends State<LoginPage> {
         }),
       );
 
-      // Debug: Print response info
-      print('📡 Login Request Sent');
-      print('   Status Code: ${response.statusCode}');
-      print('   Response Body: ${response.body}');
-
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
         // Backend sends: {success, message, data: {user, token}}
         // Extract the nested 'data' object
         final data = responseData['data'] as Map<String, dynamic>?;
-        
+
         if (data == null) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Format response tidak sesuai. Data tidak ditemukan.'),
+                content:
+                    Text('Format response tidak sesuai. Data tidak ditemukan.'),
                 backgroundColor: Colors.orange,
               ),
             );
@@ -84,28 +80,23 @@ class _LoginPageState extends State<LoginPage> {
 
         // 1. Ambil data User & Token dari data object
         final userMap = data['user'] as Map<String, dynamic>?;
-        
+
         // Try different possible field names for username
-        final String namaPengguna = userMap?['username'] ?? 
-                                    userMap?['user_name'] ?? 
-                                    userMap?['nama_lengkap'] ?? 
-                                    'Pengguna';
-        
+        final String namaPengguna = userMap?['username'] ??
+            userMap?['user_name'] ??
+            userMap?['nama_lengkap'] ??
+            'Pengguna';
+
         final String emailPengguna = userMap?['email'] ?? 'email@banyumas.com';
         final String token = data['token'] ?? '';
-
-        // Debug: Print untuk troubleshooting
-        print('🔵 Backend Response:');
-        print('   Token: "$token"');
-        print('   Username: $namaPengguna');
-        print('   Email: $emailPengguna');
 
         // Validate response has required fields
         if (token.isEmpty || userMap == null) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Response tidak valid dari server. Token atau user data kosong.\n\nCek console untuk detail response.'),
+                content: Text(
+                    'Response tidak valid dari server. Token atau user data kosong.\n\nCek console untuk detail response.'),
                 backgroundColor: Colors.orange,
                 duration: const Duration(seconds: 5),
               ),
@@ -144,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       } else {
         final errorData = jsonDecode(response.body);
-        
+
         // Check if error is due to unverified email
         if (errorData['email_not_verified'] == true) {
           if (mounted) {
@@ -154,10 +145,8 @@ class _LoginPageState extends State<LoginPage> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: const Text('Email Belum Diverifikasi'),
-                  content: Text(
-                    errorData['message'] ?? 
-                    'Email Anda belum diverifikasi. Silakan verifikasi email Anda terlebih dahulu.'
-                  ),
+                  content: Text(errorData['message'] ??
+                      'Email Anda belum diverifikasi. Silakan verifikasi email Anda terlebih dahulu.'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
@@ -169,7 +158,8 @@ class _LoginPageState extends State<LoginPage> {
                         // Navigate to registration page or show resend OTP option
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Silakan cek email Anda untuk kode OTP atau registrasi ulang'),
+                            content: Text(
+                                'Silakan cek email Anda untuk kode OTP atau registrasi ulang'),
                             duration: Duration(seconds: 4),
                           ),
                         );
@@ -177,7 +167,8 @@ class _LoginPageState extends State<LoginPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFF44336),
                       ),
-                      child: const Text('OK', style: TextStyle(color: Colors.white)),
+                      child: const Text('OK',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 );
@@ -189,7 +180,8 @@ class _LoginPageState extends State<LoginPage> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Gagal Login: ${errorData['message'] ?? 'Cek kredensial Anda'}'),
+                content: Text(
+                    'Gagal Login: ${errorData['message'] ?? 'Cek kredensial Anda'}'),
                 backgroundColor: Colors.red,
               ),
             );

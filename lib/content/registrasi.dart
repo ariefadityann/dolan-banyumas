@@ -17,10 +17,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // 1. DEFINISI CONTROLLER
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController(); // Ganti nama_lengkap dengan email
+  final TextEditingController _emailController =
+      TextEditingController(); // Ganti nama_lengkap dengan email
   final TextEditingController _waController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -64,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _isLoading = true;
     });
 
-    const String url = 'http://127.0.0.1:8000/api/dolanbanyumas/register';
+    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/register';
 
     try {
       final response = await http.post(
@@ -88,7 +90,8 @@ class _RegisterPageState extends State<RegisterPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(data['message'] ?? 'Kode OTP telah dikirim ke email Anda'),
+              content: Text(
+                  data['message'] ?? 'Kode OTP telah dikirim ke email Anda'),
               backgroundColor: Colors.green,
             ),
           );
@@ -105,7 +108,9 @@ class _RegisterPageState extends State<RegisterPage> {
         final errorData = jsonDecode(response.body);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Gagal: ${errorData['message'] ?? 'Terjadi kesalahan'}')),
+            SnackBar(
+                content: Text(
+                    'Gagal: ${errorData['message'] ?? 'Terjadi kesalahan'}')),
           );
         }
       }
@@ -171,24 +176,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 16),
                     // 3. PASANG CONTROLLER KE TEXTFIELD
                     _buildTextField(
-                      label: 'Username', 
-                      hint: 'Username', 
-                      controller: _usernameController
-                    ),
+                        label: 'Username',
+                        hint: 'Username',
+                        controller: _usernameController),
                     const SizedBox(height: 16),
                     _buildTextField(
-                      label: 'Email', 
-                      hint: 'contoh@email.com', 
-                      controller: _emailController,
-                      isEmail: true
-                    ),
+                        label: 'Email',
+                        hint: 'contoh@email.com',
+                        controller: _emailController,
+                        isEmail: true),
                     const SizedBox(height: 16),
                     _buildTextField(
-                      label: 'No WA',
-                      hint: 'Contoh: 081234567890',
-                      isNumeric: true,
-                      controller: _waController
-                    ),
+                        label: 'No WA',
+                        hint: 'Contoh: 081234567890',
+                        isNumeric: true,
+                        controller: _waController),
                     const SizedBox(height: 16),
                     _buildSectionDivider('Password'),
                     const SizedBox(height: 16),
@@ -209,7 +211,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _confirmPasswordController,
                       onToggleVisibility: () {
                         setState(() {
-                          _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                          _isConfirmPasswordVisible =
+                              !_isConfirmPasswordVisible;
                         });
                       },
                     ),
@@ -217,10 +220,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _isLoading ? null : () {
-                           // PANGGIL FUNGSI REGISTER
-                           _registerUser();
-                        },
+                        onPressed: _isLoading
+                            ? null
+                            : () {
+                                // PANGGIL FUNGSI REGISTER
+                                _registerUser();
+                              },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFF44336),
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -228,18 +233,19 @@ class _RegisterPageState extends State<RegisterPage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: _isLoading 
-                          ? const SizedBox(
-                              height: 20, width: 20, 
-                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
-                            )
-                          : const Text(
-                              'Daftar',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                    color: Colors.white, strokeWidth: 2))
+                            : const Text(
+                                'Daftar',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -293,13 +299,12 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   // MODIFIKASI: Tambahkan parameter controller
-  Widget _buildTextField({
-    required String label, 
-    required String hint, 
-    required TextEditingController controller, // Tambahan
-    bool isNumeric = false,
-    bool isEmail = false
-  }) {
+  Widget _buildTextField(
+      {required String label,
+      required String hint,
+      required TextEditingController controller, // Tambahan
+      bool isNumeric = false,
+      bool isEmail = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -313,10 +318,10 @@ class _RegisterPageState extends State<RegisterPage> {
         const SizedBox(height: 8),
         TextField(
           controller: controller, // Pasang disini
-          keyboardType: isNumeric 
-              ? TextInputType.phone 
-              : isEmail 
-                  ? TextInputType.emailAddress 
+          keyboardType: isNumeric
+              ? TextInputType.phone
+              : isEmail
+                  ? TextInputType.emailAddress
                   : TextInputType.text,
           style: const TextStyle(color: Colors.black87),
           decoration: InputDecoration(
