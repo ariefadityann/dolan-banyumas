@@ -3,15 +3,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/wisata_model.dart';
+import '../config/app_config.dart'; // Import AppConfig
 
 class WisataService {
-  // Base URL untuk API
-  static const String baseUrl = 'http://127.0.0.1:8000/api/dolanbanyumas';
-  
   /// Fetch semua data wisata dari API
   Future<List<TempatWisata>> fetchWisataData() async {
     try {
-      final url = Uri.parse('$baseUrl/wisata-all');
+      final url = Uri.parse('${AppConfig.baseUrl()}/api/dolanbanyumas/wisata-all');
       
       print('🔵 Fetching wisata data from: $url');
       
@@ -56,7 +54,7 @@ class WisataService {
   /// Fetch wisata by ID (optional, jika backend support)
   Future<TempatWisata?> fetchWisataById(String id) async {
     try {
-      final url = Uri.parse('$baseUrl/wisata/$id');
+      final url = Uri.parse('${AppConfig.baseUrl()}/api/dolanbanyumas/wisata/$id');
       
       final response = await http.get(
         url,
@@ -88,7 +86,7 @@ class WisataService {
   /// Fetch wisata by kategori (optional)
   Future<List<TempatWisata>> fetchWisataByKategori(String kategori) async {
     try {
-      final url = Uri.parse('$baseUrl/wisata/kategori/$kategori');
+      final url = Uri.parse('${AppConfig.baseUrl()}/api/dolanbanyumas/wisata/kategori/$kategori');
       
       final response = await http.get(
         url,

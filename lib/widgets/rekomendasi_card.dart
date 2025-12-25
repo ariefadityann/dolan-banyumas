@@ -4,6 +4,7 @@ import 'package:provider/provider.dart'; // Import Provider
 import '../models/wisata_model.dart';
 import '../pages/home/detail_wisata.dart';
 import '../providers/favorites_provider.dart'; // Import FavoritesProvider
+import '../config/app_config.dart'; // Import AppConfig
 
 class RekomendasiCard extends StatelessWidget {
   final TempatWisata wisata;
@@ -169,7 +170,7 @@ class RekomendasiCard extends StatelessWidget {
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       )
-                    ]),
+                     ]),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Container(
@@ -178,7 +179,7 @@ class RekomendasiCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: wisata.gambarUrl.isNotEmpty
                           ? DecorationImage(
-                              image: NetworkImage(wisata.gambarUrl),
+                              image: NetworkImage(AppConfig.getImageUrl(wisata.gambarUrl)),
                               fit: BoxFit.cover,
                               onError: (error, stackTrace) {
                                 print('❌ Image Error: $error');

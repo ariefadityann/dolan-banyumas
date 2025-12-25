@@ -8,8 +8,8 @@ class TempatWisata {
   final String caption;
   String jarak;
   final String harga;
-  final String gambarUrl;
-  final List<String> images;
+  final String gambarUrl;  // ← PATH SAJA (images/alunalun.jpg)
+  final List<String> images;  // ← PATH SAJA
   final String alamat;
   final String telepon;
   final String jamBuka;
@@ -37,39 +37,6 @@ class TempatWisata {
 
   // METHOD PENTING #1: Untuk mengubah data dari server/JSON menjadi Object
   factory TempatWisata.fromJson(Map<String, dynamic> json) {
-    // Helper function to convert relative URL to full URL
-    String _getFullImageUrl(String? url) {
-      if (url == null || url.isEmpty) return '';
-      
-      // If already full URL (starts with http/https), return as is
-      if (url.startsWith('http://') || url.startsWith('https://')) {
-        return url;
-      }
-      
-      // If relative path, add base URL
-      const String baseUrl = 'http://127.0.0.1:8000';
-      
-      // Remove leading slash if exists
-      final cleanUrl = url.startsWith('/') ? url.substring(1) : url;
-      
-      final fullUrl = '$baseUrl/$cleanUrl';
-      
-      // Debug: Print URL conversion
-      print('🖼️ Image URL Conversion:');
-      print('   Original: $url');
-      print('   Converted: $fullUrl');
-      
-      return fullUrl;
-    }
-    
-    // Helper for images array
-    List<String> _getFullImageUrls(dynamic imagesJson) {
-      if (imagesJson == null) return [];
-      
-      final List<String> imagesList = List<String>.from(imagesJson);
-      return imagesList.map((url) => _getFullImageUrl(url)).toList();
-    }
-    
     return TempatWisata(
       nama: json['nama'] ?? '',
       kategori: json['kategori'] ?? '',
@@ -77,9 +44,9 @@ class TempatWisata {
       caption: json['caption'] ?? '',
       jarak: json['jarak'] ?? '',
       harga: json['harga'] ?? '0',
-      // Try both 'gambar_url' (backend) and 'gambarUrl' (fallback)
-      gambarUrl: _getFullImageUrl(json['gambar_url'] ?? json['gambarUrl']),
-      images: _getFullImageUrls(json['images']),
+      // Simpan PATH saja, BUKAN full URL
+      gambarUrl: json['gambar_url'] ?? json['gambarUrl'] ?? '',
+      images: json['images'] != null ? List<String>.from(json['images']) : [],
       alamat: json['alamat'] ?? '',
       telepon: json['telepon'] ?? '',
       jamBuka: json['jamBuka'] ?? json['jam_buka'] ?? '',

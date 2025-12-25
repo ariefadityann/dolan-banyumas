@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // 1. Tambah Import ini
 import '../../models/wisata_model.dart';
-import 'order_detail_page.dart'; 
+import 'order_detail_page.dart';
+import '../../config/app_config.dart'; // Import AppConfig 
 
 class BookingPage extends StatefulWidget {
   final TempatWisata wisata;
@@ -158,13 +159,24 @@ class _BookingPageState extends State<BookingPage> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                widget.wisata.gambarUrl,
+              child: Container(
                 width: 80,
                 height: 80,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                    const Icon(Icons.forest, size: 40, color: Colors.white),
+                decoration: BoxDecoration(
+                  image: widget.wisata.gambarUrl.isNotEmpty
+                      ? DecorationImage(
+                          image: NetworkImage(AppConfig.getImageUrl(widget.wisata.gambarUrl)),
+                          fit: BoxFit.cover,
+                          onError: (error, stackTrace) {
+                            print('❌ Booking Image Error: $error');
+                          },
+                        )
+                      : null,
+                  color: widget.wisata.gambarUrl.isEmpty ? Colors.white.withOpacity(0.1) : null,
+                ),
+                child: widget.wisata.gambarUrl.isEmpty
+                    ? const Icon(Icons.forest, size: 40, color: Colors.white)
+                    : null,
               ),
             ),
           ),

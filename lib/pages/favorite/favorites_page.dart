@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../models/wisata_model.dart';
 import '../../providers/favorites_provider.dart';
 import '../home/detail_wisata.dart';
+import '../../config/app_config.dart'; // Import AppConfig
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
@@ -259,11 +260,24 @@ class _FavoritesPageState extends State<FavoritesPage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                item.gambarUrl,
+              child: Container(
                 width: 110,
                 height: 110,
-                fit: BoxFit.cover,
+                decoration: BoxDecoration(
+                  image: item.gambarUrl.isNotEmpty
+                      ? DecorationImage(
+                          image: NetworkImage(AppConfig.getImageUrl(item.gambarUrl)),
+                          fit: BoxFit.cover,
+                          onError: (error, stackTrace) {
+                            print('❌ Favorites Image Error: $error');
+                          },
+                        )
+                      : null,
+                  color: item.gambarUrl.isEmpty ? Colors.grey[300] : null,
+                ),
+                child: item.gambarUrl.isEmpty
+                    ? const Icon(Icons.broken_image, color: Colors.grey)
+                    : null,
               ),
             ),
             const SizedBox(width: 15),
