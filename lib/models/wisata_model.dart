@@ -40,36 +40,36 @@ class TempatWisata {
     // Helper function to convert relative URL to full URL
     String _getFullImageUrl(String? url) {
       if (url == null || url.isEmpty) return '';
-      
+
       // If already full URL (starts with http/https), return as is
       if (url.startsWith('http://') || url.startsWith('https://')) {
         return url;
       }
-      
+
       // If relative path, add base URL
-      const String baseUrl = 'http://127.0.0.1:8000';
-      
+      const String baseUrl = 'http://10.0.2.2:8000';
+
       // Remove leading slash if exists
       final cleanUrl = url.startsWith('/') ? url.substring(1) : url;
-      
+
       final fullUrl = '$baseUrl/$cleanUrl';
-      
+
       // Debug: Print URL conversion
       print('🖼️ Image URL Conversion:');
       print('   Original: $url');
       print('   Converted: $fullUrl');
-      
+
       return fullUrl;
     }
-    
+
     // Helper for images array
     List<String> _getFullImageUrls(dynamic imagesJson) {
       if (imagesJson == null) return [];
-      
+
       final List<String> imagesList = List<String>.from(imagesJson);
       return imagesList.map((url) => _getFullImageUrl(url)).toList();
     }
-    
+
     return TempatWisata(
       nama: json['nama'] ?? '',
       kategori: json['kategori'] ?? '',

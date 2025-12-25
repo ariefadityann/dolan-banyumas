@@ -6,15 +6,15 @@ import '../models/wisata_model.dart';
 
 class WisataService {
   // Base URL untuk API
-  static const String baseUrl = 'http://127.0.0.1:8000/api/dolanbanyumas';
-  
+  static const String baseUrl = 'http://10.0.2.2:8000/api/dolanbanyumas';
+
   /// Fetch semua data wisata dari API
   Future<List<TempatWisata>> fetchWisataData() async {
     try {
       final url = Uri.parse('$baseUrl/wisata-all');
-      
+
       print('🔵 Fetching wisata data from: $url');
-      
+
       final response = await http.get(
         url,
         headers: {
@@ -24,13 +24,13 @@ class WisataService {
       );
 
       print('📡 Response Status: ${response.statusCode}');
-      
+
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        
+
         // Handle different response formats
         List<dynamic> jsonResponse;
-        
+
         // Check if response has 'data' wrapper
         if (responseData is Map && responseData.containsKey('data')) {
           jsonResponse = responseData['data'] as List;
@@ -39,9 +39,9 @@ class WisataService {
         } else {
           throw Exception('Unexpected response format');
         }
-        
+
         print('✅ Loaded ${jsonResponse.length} wisata items');
-        
+
         return jsonResponse.map((data) => TempatWisata.fromJson(data)).toList();
       } else {
         print('❌ Error: ${response.statusCode} - ${response.body}');
@@ -52,12 +52,12 @@ class WisataService {
       throw Exception('Error fetching wisata data: $e');
     }
   }
-  
+
   /// Fetch wisata by ID (optional, jika backend support)
   Future<TempatWisata?> fetchWisataById(String id) async {
     try {
       final url = Uri.parse('$baseUrl/wisata/$id');
-      
+
       final response = await http.get(
         url,
         headers: {
@@ -68,12 +68,12 @@ class WisataService {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        
+
         // Handle response with 'data' wrapper
         final data = responseData is Map && responseData.containsKey('data')
             ? responseData['data']
             : responseData;
-        
+
         return TempatWisata.fromJson(data);
       } else {
         print('❌ Error fetching wisata by ID: ${response.statusCode}');
@@ -84,12 +84,12 @@ class WisataService {
       return null;
     }
   }
-  
+
   /// Fetch wisata by kategori (optional)
   Future<List<TempatWisata>> fetchWisataByKategori(String kategori) async {
     try {
       final url = Uri.parse('$baseUrl/wisata/kategori/$kategori');
-      
+
       final response = await http.get(
         url,
         headers: {
@@ -100,7 +100,7 @@ class WisataService {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        
+
         List<dynamic> jsonResponse;
         if (responseData is Map && responseData.containsKey('data')) {
           jsonResponse = responseData['data'] as List;
@@ -109,7 +109,7 @@ class WisataService {
         } else {
           throw Exception('Unexpected response format');
         }
-        
+
         return jsonResponse.map((data) => TempatWisata.fromJson(data)).toList();
       } else {
         throw Exception('Failed to load wisata by kategori');

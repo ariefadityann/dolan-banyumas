@@ -7,7 +7,7 @@ import '../pages/home/home_screen.dart';
 
 class VerifyOTPPage extends StatefulWidget {
   final String email;
-  
+
   const VerifyOTPPage({super.key, required this.email});
 
   @override
@@ -17,13 +17,13 @@ class VerifyOTPPage extends StatefulWidget {
 class _VerifyOTPPageState extends State<VerifyOTPPage> {
   bool _isLoading = false;
   bool _isResending = false;
-  
+
   // Controllers for 6 OTP input fields
   final List<TextEditingController> _otpControllers = List.generate(
     6,
     (index) => TextEditingController(),
   );
-  
+
   final List<FocusNode> _focusNodes = List.generate(
     6,
     (index) => FocusNode(),
@@ -46,7 +46,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
 
   Future<void> _verifyOTP() async {
     final otpCode = _getOTPCode();
-    
+
     if (otpCode.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Mohon masukkan kode OTP 6 digit')),
@@ -58,7 +58,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
       _isLoading = true;
     });
 
-    const String url = 'http://127.0.0.1:8000/api/dolanbanyumas/verify-email';
+    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/verify-email';
 
     try {
       // Debug: Print request data
@@ -69,7 +69,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
       print('🔵 Verify OTP Request:');
       print('   URL: $url');
       print('   Body: ${jsonEncode(requestBody)}');
-      
+
       final response = await http.post(
         Uri.parse(url),
         headers: {
@@ -84,28 +84,29 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = jsonDecode(response.body);
-        
+
         // After successful verification, auto-login user
         // Extract user data from response
         final data = responseData['data'] as Map<String, dynamic>?;
         final userMap = data?['user'] as Map<String, dynamic>?;
         final token = data?['token'] as String?;
-        
+
         if (mounted) {
           if (token != null && userMap != null) {
             // Save user session
             final prefs = await SharedPreferences.getInstance();
             await prefs.setString('auth_token', token);
             await prefs.setString('user_name', userMap['username'] ?? 'User');
-            await prefs.setString('user_email', userMap['email'] ?? widget.email);
-            
+            await prefs.setString(
+                'user_email', userMap['email'] ?? widget.email);
+
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Email berhasil diverifikasi! Selamat datang!'),
                 backgroundColor: Colors.green,
               ),
             );
-            
+
             // Navigate directly to home screen
             Navigator.pushAndRemoveUntil(
               context,
@@ -125,7 +126,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                 backgroundColor: Colors.green,
               ),
             );
-            
+
             // Navigate to login page
             Navigator.pushAndRemoveUntil(
               context,
@@ -141,7 +142,8 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Gagal: ${errorData['message'] ?? 'Kode OTP tidak valid'}'),
+              content: Text(
+                  'Gagal: ${errorData['message'] ?? 'Kode OTP tidak valid'}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -167,7 +169,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
       _isResending = true;
     });
 
-    const String url = 'http://127.0.0.1:8000/api/dolanbanyumas/resend-otp';
+    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/resend-otp';
 
     try {
       final response = await http.post(
@@ -195,7 +197,8 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Gagal: ${errorData['message'] ?? 'Tidak dapat mengirim ulang OTP'}'),
+              content: Text(
+                  'Gagal: ${errorData['message'] ?? 'Tidak dapat mengirim ulang OTP'}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -236,7 +239,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
             // Progress Indicator
             _buildProgressIndicator(),
             const SizedBox(height: 40),
-            
+
             // Icon
             Container(
               padding: const EdgeInsets.all(20),
@@ -251,7 +254,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
               ),
             ),
             const SizedBox(height: 24),
-            
+
             // Title
             const Text(
               'Verifikasi Email',
@@ -262,7 +265,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
               ),
             ),
             const SizedBox(height: 12),
-            
+
             // Description
             Text(
               'Masukkan kode OTP yang telah dikirim ke',
@@ -283,7 +286,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
               ),
             ),
             const SizedBox(height: 40),
-            
+
             // OTP Input Fields
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -316,7 +319,8 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.blue, width: 2),
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2),
                       ),
                     ),
                     onChanged: (value) {
@@ -331,7 +335,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
               }),
             ),
             const SizedBox(height: 32),
-            
+
             // Verify Button
             SizedBox(
               width: double.infinity,
@@ -365,7 +369,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
               ),
             ),
             const SizedBox(height: 24),
-            
+
             // Resend OTP
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -484,7 +488,7 @@ class RegistrationSuccessPage extends StatelessWidget {
               // Progress Indicator
               _buildProgressIndicator(),
               const Spacer(),
-              
+
               // Success Icon
               Container(
                 padding: const EdgeInsets.all(30),
@@ -499,7 +503,7 @@ class RegistrationSuccessPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // Success Message
               const Text(
                 'Registrasi Berhasil!',
@@ -520,7 +524,7 @@ class RegistrationSuccessPage extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              
+
               // Login Button
               SizedBox(
                 width: double.infinity,
