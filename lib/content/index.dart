@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart'; // Pastikan path ke login.dart benar
+import 'registrasi.dart'; // Import registrasi page
 // Sesuaikan path ini ke file IndexPage (halaman utama) Anda
 import '../pages/home/home_screen.dart'; 
 
@@ -177,9 +178,13 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-                      // Pastikan Anda memiliki rute '/register' di main.dart
-                      // atau ganti dengan MaterialPageRoute
-                      Navigator.pushNamed(context, '/register');
+                      // Navigate to registration page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterPage(),
+                        ),
+                      );
                     },
                     child: RichText(
                       text: TextSpan(
