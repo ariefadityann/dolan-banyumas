@@ -60,19 +60,39 @@ class _IndexPageState extends State<IndexPage> {
     'Penginapan',
   ];
 
+  bool _hasInitialized = false;
+
   @override
   void initState() {
     super.initState();
     _fetchData();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Auto-refresh saat kembali ke halaman ini
+    if (_hasInitialized && mounted) {
+      _fetchData();
+    }
+    _hasInitialized = true;
+  }
+
   Future<void> _fetchData() async {
     if (!mounted) return;
+    
+    print('🔄 === FETCHING DATA === ${DateTime.now()}');
     setState(() => _isLoading = true);
 
     try {
       final List<TempatWisata> loadedWisata =
           await _wisataService.fetchWisataData();
+
+      print('📊 Total wisata loaded: ${loadedWisata.length}');
+      print('📋 Wisata names:');
+      for (var wisata in loadedWisata) {
+        print('   - ${wisata.nama} (${wisata.kategori})');
+      }
 
       try {
         final Position position = await _locationService.getCurrentLocation();
@@ -94,8 +114,10 @@ class _IndexPageState extends State<IndexPage> {
           _allWisata = loadedWisata;
           _isLoading = false;
         });
+        print('✅ Data updated! Total: ${_allWisata.length}');
       }
     } catch (e) {
+      print('❌ ERROR fetching data: $e');
       if (mounted) {
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(

@@ -1,4 +1,3 @@
-// lib/services/wisata_service.dart
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -39,6 +38,8 @@ class WisataService {
         }
         
         print('✅ Loaded ${jsonResponse.length} wisata items');
+        print('📋 First item: ${jsonResponse.isNotEmpty ? jsonResponse[0] : "empty"}');
+        print('📋 Last item: ${jsonResponse.isNotEmpty ? jsonResponse[jsonResponse.length - 1] : "empty"}');
         
         return jsonResponse.map((data) => TempatWisata.fromJson(data)).toList();
       } else {

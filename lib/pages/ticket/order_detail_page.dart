@@ -128,13 +128,16 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       if (!mounted) return;
 
       if (result == "success") {
-        ScaffoldMessenger.of(context).showSnackBar(
+        final messenger = ScaffoldMessenger.of(context);
+        // Kembali ke halaman utama (home)
+        Navigator.popUntil(context, (route) => route.isFirst);
+        messenger.showSnackBar(
           const SnackBar(
             content: Text("Pembayaran berhasil!"),
             backgroundColor: Colors.green,
+            duration: Duration(seconds: 3),
           ),
         );
-        Navigator.pop(context);
       }
     } catch (e) {
       if (mounted) {

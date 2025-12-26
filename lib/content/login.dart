@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
     // Ganti URL ini dengan IP Address komputer Anda jika menggunakan Emulator (misal: 10.0.2.2 untuk Android Emulator)
     // atau IP LAN jika menggunakan HP fisik (misal: 192.168.1.x)
-    const String url = 'http://127.0.0.1:8000/api/dolanbanyumas/login';
+    const String url = 'http://192.168.100.20:8000/api/dolanbanyumas/login';
 
     try {
       final response = await http.post(
@@ -54,11 +54,6 @@ class _LoginPageState extends State<LoginPage> {
           'password': _passwordController.text,
         }),
       );
-
-      // Debug: Print response info
-      print('📡 Login Request Sent');
-      print('   Status Code: ${response.statusCode}');
-      print('   Response Body: ${response.body}');
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
@@ -93,12 +88,6 @@ class _LoginPageState extends State<LoginPage> {
         
         final String emailPengguna = userMap?['email'] ?? 'email@banyumas.com';
         final String token = data['token'] ?? '';
-
-        // Debug: Print untuk troubleshooting
-        print('🔵 Backend Response:');
-        print('   Token: "$token"');
-        print('   Username: $namaPengguna');
-        print('   Email: $emailPengguna');
 
         // Validate response has required fields
         if (token.isEmpty || userMap == null) {
