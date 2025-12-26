@@ -61,12 +61,13 @@ class _LoginPageState extends State<LoginPage> {
         // Backend sends: {success, message, data: {user, token}}
         // Extract the nested 'data' object
         final data = responseData['data'] as Map<String, dynamic>?;
-        
+
         if (data == null) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Format response tidak sesuai. Data tidak ditemukan.'),
+                content:
+                    Text('Format response tidak sesuai. Data tidak ditemukan.'),
                 backgroundColor: Colors.orange,
               ),
             );
@@ -79,13 +80,13 @@ class _LoginPageState extends State<LoginPage> {
 
         // 1. Ambil data User & Token dari data object
         final userMap = data['user'] as Map<String, dynamic>?;
-        
+
         // Try different possible field names for username
-        final String namaPengguna = userMap?['username'] ?? 
-                                    userMap?['user_name'] ?? 
-                                    userMap?['nama_lengkap'] ?? 
-                                    'Pengguna';
-        
+        final String namaPengguna = userMap?['username'] ??
+            userMap?['user_name'] ??
+            userMap?['nama_lengkap'] ??
+            'Pengguna';
+
         final String emailPengguna = userMap?['email'] ?? 'email@banyumas.com';
         final String token = data['token'] ?? '';
 
@@ -94,7 +95,8 @@ class _LoginPageState extends State<LoginPage> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Response tidak valid dari server. Token atau user data kosong.\n\nCek console untuk detail response.'),
+                content: Text(
+                    'Response tidak valid dari server. Token atau user data kosong.\n\nCek console untuk detail response.'),
                 backgroundColor: Colors.orange,
                 duration: const Duration(seconds: 5),
               ),
@@ -133,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       } else {
         final errorData = jsonDecode(response.body);
-        
+
         // Check if error is due to unverified email
         if (errorData['email_not_verified'] == true) {
           if (mounted) {
@@ -143,10 +145,8 @@ class _LoginPageState extends State<LoginPage> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: const Text('Email Belum Diverifikasi'),
-                  content: Text(
-                    errorData['message'] ?? 
-                    'Email Anda belum diverifikasi. Silakan verifikasi email Anda terlebih dahulu.'
-                  ),
+                  content: Text(errorData['message'] ??
+                      'Email Anda belum diverifikasi. Silakan verifikasi email Anda terlebih dahulu.'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
@@ -158,7 +158,8 @@ class _LoginPageState extends State<LoginPage> {
                         // Navigate to registration page or show resend OTP option
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Silakan cek email Anda untuk kode OTP atau registrasi ulang'),
+                            content: Text(
+                                'Silakan cek email Anda untuk kode OTP atau registrasi ulang'),
                             duration: Duration(seconds: 4),
                           ),
                         );
@@ -166,7 +167,8 @@ class _LoginPageState extends State<LoginPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFF44336),
                       ),
-                      child: const Text('OK', style: TextStyle(color: Colors.white)),
+                      child: const Text('OK',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 );
@@ -178,7 +180,8 @@ class _LoginPageState extends State<LoginPage> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Gagal Login: ${errorData['message'] ?? 'Cek kredensial Anda'}'),
+                content: Text(
+                    'Gagal Login: ${errorData['message'] ?? 'Cek kredensial Anda'}'),
                 backgroundColor: Colors.red,
               ),
             );
