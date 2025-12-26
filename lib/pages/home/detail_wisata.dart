@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/wisata_model.dart';
 import '../../providers/favorites_provider.dart';
+import '../../config/app_config.dart'; // Import AppConfig
 
 class DetailWisata extends StatefulWidget {
   final TempatWisata wisata;
@@ -89,15 +90,24 @@ class _DetailWisataState extends State<DetailWisata> {
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30),
                     ),
-                    child: Image.asset(
-                      _currentMainImage,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey[300],
-                        child: const Center(
-                            child:
-                                Icon(Icons.broken_image, color: Colors.grey)),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: _currentMainImage.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(AppConfig.getImageUrl(_currentMainImage)),
+                                fit: BoxFit.cover,
+                                onError: (error, stackTrace) {
+                                  print('❌ Header Image Error: $error');
+                                },
+                              )
+                            : null,
+                        color: _currentMainImage.isEmpty ? Colors.grey[300] : null,
                       ),
+                      child: _currentMainImage.isEmpty
+                          ? const Center(
+                              child: Icon(Icons.broken_image, color: Colors.grey, size: 50),
+                            )
+                          : null,
                     ),
                   ),
                   Container(
@@ -215,14 +225,21 @@ class _DetailWisataState extends State<DetailWisata> {
                   panEnabled: true,
                   scaleEnabled: true,
                   child: Center(
-                    child: Image.asset(
-                      imagePath,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) => Container(
-                        color: Colors.grey[900],
-                        child:
-                            const Icon(Icons.broken_image, color: Colors.white),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: imagePath.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(AppConfig.getImageUrl(imagePath)),
+                                fit: BoxFit.contain,
+                                onError: (error, stackTrace) {
+                                  print('❌ Fullscreen Image Error: $error');
+                                },
+                              )
+                            : null,
                       ),
+                      child: imagePath.isEmpty
+                          ? const Icon(Icons.broken_image, color: Colors.white, size: 80)
+                          : null,
                     ),
                   ),
                 ),
@@ -590,16 +607,24 @@ class _DetailWisataState extends State<DetailWisata> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        imagePath,
+                      child: Container(
                         width: 340,
                         height: 180,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          color: Colors.grey[300],
-                          child: const Icon(Icons.broken_image,
-                              color: Colors.grey),
+                        decoration: BoxDecoration(
+                          image: imagePath.isNotEmpty
+                              ? DecorationImage(
+                                  image: NetworkImage(AppConfig.getImageUrl(imagePath)),
+                                  fit: BoxFit.cover,
+                                  onError: (error, stackTrace) {
+                                    print('❌ Gallery Image Error: $error');
+                                  },
+                                )
+                              : null,
+                          color: imagePath.isEmpty ? Colors.grey[300] : null,
                         ),
+                        child: imagePath.isEmpty
+                            ? const Icon(Icons.broken_image, color: Colors.grey)
+                            : null,
                       ),
                     ),
                   ),

@@ -4,6 +4,7 @@ import 'package:dolan_banyumas/pages/home/detail_wisata.dart';
 import 'package:flutter/material.dart';
 import '../models/wisata_model.dart';
 import '../pages/home/detail_wisata.dart';
+import '../config/app_config.dart'; // Import AppConfig
 
 class TerdekatCard extends StatelessWidget {
   final TempatWisata wisata;
@@ -43,7 +44,7 @@ class TerdekatCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: wisata.gambarUrl.isNotEmpty
                       ? DecorationImage(
-                          image: NetworkImage(wisata.gambarUrl),
+                          image: NetworkImage(AppConfig.getImageUrl(wisata.gambarUrl)),
                           fit: BoxFit.cover,
                           onError: (error, stackTrace) {
                             print('❌ Image Error: $error');

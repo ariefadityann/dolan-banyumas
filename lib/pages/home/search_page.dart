@@ -5,6 +5,7 @@ import 'dart:convert';
 // Ganti dengan path yang benar ke file model dan halaman detail Anda
 import '../../models/wisata_model.dart';
 import 'detail_wisata.dart';
+import '../../config/app_config.dart'; // Import AppConfig
 
 // Model untuk filter kategori
 class CategoryFilter {
@@ -308,13 +309,24 @@ class SearchResultCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16.0),
-              child: Image.asset(
-                wisata.gambarUrl,
-                width: 80, height: 80, fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  width: 80, height: 80, color: Colors.grey.shade200,
-                  child: const Icon(Icons.image_not_supported, color: Colors.grey),
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  image: wisata.gambarUrl.isNotEmpty
+                      ? DecorationImage(
+                          image: NetworkImage(AppConfig.getImageUrl(wisata.gambarUrl)),
+                          fit: BoxFit.cover,
+                          onError: (error, stackTrace) {
+                            print('❌ Search Image Error: $error');
+                          },
+                        )
+                      : null,
+                  color: wisata.gambarUrl.isEmpty ? Colors.grey.shade200 : null,
                 ),
+                child: wisata.gambarUrl.isEmpty
+                    ? const Icon(Icons.broken_image, color: Colors.grey)
+                    : null,
               ),
             ),
             const SizedBox(width: 16),

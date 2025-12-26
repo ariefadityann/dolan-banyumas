@@ -1,18 +1,15 @@
-// lib/services/wisata_service.dart
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/wisata_model.dart';
+import '../config/app_config.dart'; // Import AppConfig
 
 class WisataService {
-  // Base URL untuk API
-  static const String baseUrl = 'http://10.0.2.2:8000/api/dolanbanyumas';
-
   /// Fetch semua data wisata dari API
   Future<List<TempatWisata>> fetchWisataData() async {
     try {
-      final url = Uri.parse('$baseUrl/wisata-all');
-
+      final url = Uri.parse('${AppConfig.baseUrl()}/api/dolanbanyumas/wisata-all');
+      
       print('🔵 Fetching wisata data from: $url');
 
       final response = await http.get(
@@ -41,7 +38,9 @@ class WisataService {
         }
 
         print('✅ Loaded ${jsonResponse.length} wisata items');
-
+        print('📋 First item: ${jsonResponse.isNotEmpty ? jsonResponse[0] : "empty"}');
+        print('📋 Last item: ${jsonResponse.isNotEmpty ? jsonResponse[jsonResponse.length - 1] : "empty"}');
+        
         return jsonResponse.map((data) => TempatWisata.fromJson(data)).toList();
       } else {
         print('❌ Error: ${response.statusCode} - ${response.body}');
@@ -56,8 +55,8 @@ class WisataService {
   /// Fetch wisata by ID (optional, jika backend support)
   Future<TempatWisata?> fetchWisataById(String id) async {
     try {
-      final url = Uri.parse('$baseUrl/wisata/$id');
-
+      final url = Uri.parse('${AppConfig.baseUrl()}/api/dolanbanyumas/wisata/$id');
+      
       final response = await http.get(
         url,
         headers: {
@@ -88,8 +87,8 @@ class WisataService {
   /// Fetch wisata by kategori (optional)
   Future<List<TempatWisata>> fetchWisataByKategori(String kategori) async {
     try {
-      final url = Uri.parse('$baseUrl/wisata/kategori/$kategori');
-
+      final url = Uri.parse('${AppConfig.baseUrl()}/api/dolanbanyumas/wisata/kategori/$kategori');
+      
       final response = await http.get(
         url,
         headers: {

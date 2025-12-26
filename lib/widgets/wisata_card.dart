@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/wisata_model.dart'; // Pastikan path ini benar
+import '../config/app_config.dart'; // Import AppConfig
 
 class WisataCard extends StatelessWidget {
   final TempatWisata wisata;
@@ -8,6 +9,9 @@ class WisataCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Generate full URL from relative path
+    final String imageUrl = AppConfig.getImageUrl(wisata.gambarUrl);
+
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
@@ -23,20 +27,20 @@ class WisataCard extends StatelessWidget {
             height: 180,
             width: double.infinity,
             decoration: BoxDecoration(
-              image: wisata.gambarUrl.isNotEmpty
+              image: imageUrl.isNotEmpty
                   ? DecorationImage(
-                      image: NetworkImage(wisata.gambarUrl),
+                      image: NetworkImage(imageUrl),
                       fit: BoxFit.cover,
                       alignment: Alignment.topCenter,
                       onError: (error, stackTrace) {
                         print('❌ Image Load Error: $error');
-                        print('   URL: ${wisata.gambarUrl}');
+                        print('   URL: $imageUrl');
                       },
                     )
                   : null,
-              color: wisata.gambarUrl.isEmpty ? Colors.grey[300] : null,
+              color: imageUrl.isEmpty ? Colors.grey[300] : null,
             ),
-            child: wisata.gambarUrl.isEmpty
+            child: imageUrl.isEmpty
                 ? const Center(
                     child: Icon(Icons.broken_image, color: Colors.grey, size: 40),
                   )
