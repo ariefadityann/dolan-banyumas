@@ -52,7 +52,7 @@ class _SearchPageState extends State<SearchPage> {
     super.dispose();
   }
 
-   Future<void> _loadSearchHistory() async {
+  Future<void> _loadSearchHistory() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final historyString = prefs.getString('search_history_wisata_v2');
@@ -71,14 +71,15 @@ class _SearchPageState extends State<SearchPage> {
     } finally {
       // FINALLY akan selalu dijalankan, baik ada error maupun tidak.
       // Ini menjamin spinner akan selalu berhenti.
-      if (mounted) { // Pengecekan 'mounted' adalah praktik yang baik
+      if (mounted) {
+        // Pengecekan 'mounted' adalah praktik yang baik
         setState(() {
           _isLoadingHistory = false;
         });
       }
     }
   }
-  
+
   /// Helper function untuk update data riwayat di SharedPreferences
   Future<void> _updatePersistentHistory() async {
     final prefs = await SharedPreferences.getInstance();
@@ -97,7 +98,7 @@ class _SearchPageState extends State<SearchPage> {
     });
     await _updatePersistentHistory();
   }
-  
+
   Future<void> _deleteFromHistory(TempatWisata wisata) async {
     setState(() {
       _searchHistory.removeWhere((item) => item.id == wisata.id);
@@ -115,7 +116,6 @@ class _SearchPageState extends State<SearchPage> {
     await _updatePersistentHistory();
   }
 
-
   void _performSearch() {
     setState(() {});
   }
@@ -130,7 +130,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     final String query = _searchController.text.toLowerCase();
     final bool isSearching = query.isNotEmpty;
-    
+
     if (isSearching) {
       _filteredWisata = widget.allWisata
           .where((wisata) => wisata.nama.toLowerCase().contains(query))
@@ -151,7 +151,8 @@ class _SearchPageState extends State<SearchPage> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Search', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: const Text('Search',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: ListView(
@@ -163,7 +164,6 @@ class _SearchPageState extends State<SearchPage> {
           const SizedBox(height: 24),
           _buildSectionHeader(isSearching, displayedHistory.isNotEmpty),
           const SizedBox(height: 16),
-
           if (isSearching)
             _buildResultsList(_filteredWisata)
           else if (_isLoadingHistory)
@@ -183,13 +183,19 @@ class _SearchPageState extends State<SearchPage> {
   Widget _buildSearchBar() {
     return TextField(
       controller: _searchController,
+      style: const TextStyle(
+        color: Colors.black, // <-- TEKS YANG DIKETIK JADI HITAM
+        fontSize: 16,
+      ),
       decoration: InputDecoration(
         hintText: 'Search something...',
         hintStyle: TextStyle(color: Colors.grey.shade500),
         prefixIcon: Icon(Icons.search, color: Colors.grey.shade500),
         filled: true,
         fillColor: Colors.grey.shade100,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0), borderSide: BorderSide.none),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30.0),
+            borderSide: BorderSide.none),
         contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
       ),
     );
@@ -210,15 +216,25 @@ class _SearchPageState extends State<SearchPage> {
             child: Column(
               children: [
                 Container(
-                  width: 65, height: 65,
+                  width: 65,
+                  height: 65,
                   decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFFF44336) : Colors.grey.shade100,
+                    color: isSelected
+                        ? const Color(0xFFF44336)
+                        : Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: Icon(category.icon, color: isSelected ? Colors.white : Colors.grey.shade700, size: 32),
+                  child: Icon(category.icon,
+                      color: isSelected ? Colors.white : Colors.grey.shade700,
+                      size: 32),
                 ),
                 const SizedBox(height: 8),
-                Text(category.name, style: TextStyle(fontSize: 12, color: Colors.grey.shade800, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
+                Text(category.name,
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade800,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal)),
               ],
             ),
           );
@@ -249,38 +265,56 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
- Widget _buildResultsList(List<TempatWisata> list) {
+  Widget _buildResultsList(List<TempatWisata> list) {
     if (list.isEmpty) {
-      return const Center(child: Padding(padding: EdgeInsets.symmetric(vertical: 50.0), child: Text('Destinasi tidak ditemukan.')));
+      return const Center(
+          child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 50.0),
+              child: Text('Destinasi tidak ditemukan.')));
     }
     return Column(
-      children: list.map((wisata) => Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: SearchResultCard(
-          wisata: wisata,
-          onCardTap: (selectedWisata) {
-            _saveToHistory(selectedWisata);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailWisata(wisata: selectedWisata)));
-          },
-        ),
-      )).toList(),
+      children: list
+          .map((wisata) => Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: SearchResultCard(
+                  wisata: wisata,
+                  onCardTap: (selectedWisata) {
+                    _saveToHistory(selectedWisata);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DetailWisata(wisata: selectedWisata)));
+                  },
+                ),
+              ))
+          .toList(),
     );
   }
 
   Widget _buildHistoryList(List<TempatWisata> history) {
     if (history.isEmpty) {
-      return const Center(child: Padding(padding: EdgeInsets.symmetric(vertical: 50.0), child: Text('Belum ada riwayat untuk kategori ini.')));
+      return const Center(
+          child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 50.0),
+              child: Text('Belum ada riwayat untuk kategori ini.')));
     }
     return Column(
-      children: history.map((wisata) => Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: SearchResultCard(
-          wisata: wisata,
-          onCardTap: (selectedWisata) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailWisata(wisata: selectedWisata)));
-          },
-        ),
-      )).toList(),
+      children: history
+          .map((wisata) => Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: SearchResultCard(
+                  wisata: wisata,
+                  onCardTap: (selectedWisata) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DetailWisata(wisata: selectedWisata)));
+                  },
+                ),
+              ))
+          .toList(),
     );
   }
 }
@@ -289,11 +323,11 @@ class SearchResultCard extends StatelessWidget {
   final TempatWisata wisata;
   final Function(TempatWisata) onCardTap;
 
-  const SearchResultCard({super.key, required this.wisata, required this.onCardTap});
+  const SearchResultCard(
+      {super.key, required this.wisata, required this.onCardTap});
 
   @override
   Widget build(BuildContext context) {
-
     return InkWell(
       onTap: () => onCardTap(wisata),
       borderRadius: BorderRadius.circular(20),
@@ -310,10 +344,15 @@ class SearchResultCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(16.0),
               child: Image.asset(
                 wisata.gambarUrl,
-                width: 80, height: 80, fit: BoxFit.cover,
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
-                  width: 80, height: 80, color: Colors.grey.shade200,
-                  child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                  width: 80,
+                  height: 80,
+                  color: Colors.grey.shade200,
+                  child:
+                      const Icon(Icons.image_not_supported, color: Colors.grey),
                 ),
               ),
             ),
@@ -323,9 +362,18 @@ class SearchResultCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(wisata.nama, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text(wisata.nama,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                        color: Colors.black,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 8),
-                  Text(wisata.kategori, style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+                  Text(wisata.kategori,
+                      style:
+                          TextStyle(color: Colors.grey.shade600, fontSize: 14)),
                 ],
               ),
             ),

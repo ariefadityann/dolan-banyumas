@@ -118,6 +118,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
     if (_isSearching) {
       return TextField(
         controller: _searchController,
+        style: const TextStyle(
+          color: Colors.black, // <-- TEKS YANG DIKETIK JADI HITAM
+          fontSize: 16,
+        ),
         autofocus: true,
         decoration: InputDecoration(
           hintText: 'Cari favorit...',

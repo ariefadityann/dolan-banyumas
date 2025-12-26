@@ -4,7 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Wajib untuk logout
 
 // Sesuaikan path import Login Page Anda
-import '../../content/login.dart'; 
+import '../../content/login.dart';
 
 import '../../providers/favorites_provider.dart';
 
@@ -41,7 +41,7 @@ class IndexPage extends StatefulWidget {
   State<IndexPage> createState() => _IndexPageState();
 }
 
-class _IndexPageState extends State<IndexPage> {
+class _IndexPageState extends State<IndexPage> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final WisataService _wisataService = WisataService();
   final LocationService _locationService = LocationService();
@@ -63,16 +63,40 @@ class _IndexPageState extends State<IndexPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _fetchData();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Refresh data saat app kembali ke foreground
+    if (state == AppLifecycleState.resumed) {
+      print('🔄 App resumed - refreshing data...');
+      _fetchData();
+    }
   }
 
   Future<void> _fetchData() async {
     if (!mounted) return;
+
+    print('🔄 === FETCHING DATA === ${DateTime.now()}');
     setState(() => _isLoading = true);
 
     try {
       final List<TempatWisata> loadedWisata =
           await _wisataService.fetchWisataData();
+
+      print('📊 Total wisata loaded: ${loadedWisata.length}');
+      print('📋 Wisata names:');
+      for (var wisata in loadedWisata) {
+        print('   - ${wisata.nama} (${wisata.kategori})');
+      }
 
       try {
         final Position position = await _locationService.getCurrentLocation();
@@ -94,8 +118,10 @@ class _IndexPageState extends State<IndexPage> {
           _allWisata = loadedWisata;
           _isLoading = false;
         });
+        print('✅ Data updated! Total: ${_allWisata.length}');
       }
     } catch (e) {
+      print('❌ ERROR fetching data: $e');
       if (mounted) {
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -129,7 +155,7 @@ class _IndexPageState extends State<IndexPage> {
     if (shouldLogout == true) {
       // 2. Hapus Data Session
       final prefs = await SharedPreferences.getInstance();
-      await prefs.clear(); 
+      await prefs.clear();
 
       // 3. Navigasi Balik ke Login (dan hapus history halaman sebelumnya)
       if (mounted) {
@@ -144,6 +170,12 @@ class _IndexPageState extends State<IndexPage> {
 
   void _onItemTapped(int index) {
     setState(() => _selectedIndex = index);
+
+    // Refresh data saat kembali ke home tab
+    if (index == 0 && _allWisata.isNotEmpty) {
+      print('🔄 Switching to home tab - refreshing data...');
+      _fetchData();
+    }
   }
 
   void _onCategorySelected(String category) {
@@ -226,6 +258,7 @@ class _IndexPageState extends State<IndexPage> {
               username: widget.username,
               onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
               onSearchTap: _navigateToSearchPage,
+              onRefresh: _fetchData, // Tambahkan refresh callback
             ),
             const SizedBox(height: 80),
             const EventBanner(),
@@ -382,7 +415,7 @@ class _IndexPageState extends State<IndexPage> {
                 ),
                 // === EMAIL DITAMPILKAN DI SINI ===
                 Text(
-                  widget.email ?? 'email@banyumas.com', 
+                  widget.email ?? 'email@banyumas.com',
                   style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 14,

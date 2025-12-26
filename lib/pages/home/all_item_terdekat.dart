@@ -149,6 +149,10 @@ class _AllItemTerdekatState extends State<AllItemTerdekat> {
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
               child: TextField(
                 controller: _searchController,
+                style: const TextStyle(
+                  color: Colors.black, // <-- TEKS YANG DIKETIK JADI HITAM
+                  fontSize: 16,
+                ),
                 onChanged: _filterPlaces,
                 decoration: InputDecoration(
                   hintText: 'Cari tempat wisata...',

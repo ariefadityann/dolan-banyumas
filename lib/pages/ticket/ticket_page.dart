@@ -36,7 +36,7 @@ class _TicketPageState extends State<TicketPage> {
   final List<String> _filters = ['Pesan', 'Parkir', 'Tiket', 'Riwayat'];
 
   // 2. Variabel untuk menyimpan nama user
-  String _namaUser = 'Pengunjung'; 
+  String _namaUser = 'Pengunjung';
 
   @override
   void initState() {
@@ -52,13 +52,13 @@ class _TicketPageState extends State<TicketPage> {
 
     // === PERBAIKAN DI SINI ===
     // Validasi: Pastikan tidak null, tidak kosong, dan BUKAN tulisan 'undefined'
-    if (savedName != null && 
-        savedName.isNotEmpty && 
-        savedName.toLowerCase() != 'undefined' && 
+    if (savedName != null &&
+        savedName.isNotEmpty &&
+        savedName.toLowerCase() != 'undefined' &&
         savedName.toLowerCase() != 'null' &&
         mounted) {
       setState(() {
-        _namaUser = savedName; 
+        _namaUser = savedName;
       });
     }
     // Jika 'undefined', dia akan tetap pakai default 'Pengunjung'
@@ -79,7 +79,7 @@ class _TicketPageState extends State<TicketPage> {
 
     _popularWisata = widget.allWisata.where((wisata) {
       final bool isWisataAlam = wisata.deskripsi.toLowerCase() == 'wisata alam';
-      return isWisataAlam; 
+      return isWisataAlam;
     }).toList();
 
     if (mounted) {
@@ -152,13 +152,14 @@ class _TicketPageState extends State<TicketPage> {
               children: [
                 // 5. Tampilkan nama user di sini
                 Text(
-                  'Haii, $_namaUser 👋', 
+                  'Haii, $_namaUser 👋',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: screenWidth * 0.055,
                     fontWeight: FontWeight.bold,
                   ),
-                  overflow: TextOverflow.ellipsis, // Jaga-jaga jika nama terlalu panjang
+                  overflow: TextOverflow
+                      .ellipsis, // Jaga-jaga jika nama terlalu panjang
                   maxLines: 1,
                 ),
                 const SizedBox(height: 4),
@@ -172,7 +173,7 @@ class _TicketPageState extends State<TicketPage> {
               ],
             ),
           ),
-          const SizedBox(width: 16), 
+          const SizedBox(width: 16),
           Container(
             width: screenWidth * 0.12,
             height: screenWidth * 0.12,
@@ -187,7 +188,7 @@ class _TicketPageState extends State<TicketPage> {
               ],
             ),
             child: Image.asset(
-              'assets/img/logo.png', 
+              'assets/img/logo.png',
             ),
           ),
         ],

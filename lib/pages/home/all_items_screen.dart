@@ -167,6 +167,10 @@ class _CustomHeader extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: TextField(
                 controller: searchController,
+                style: const TextStyle(
+                  color: Colors.black, // <-- TEKS YANG DIKETIK JADI HITAM
+                  fontSize: 16,
+                ),
                 onChanged: onSearchChanged,
                 decoration: InputDecoration(
                   hintText: 'Cari di ${category}...',

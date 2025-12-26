@@ -4,13 +4,14 @@ class HomeHeader extends StatelessWidget {
   final String? username;
   final VoidCallback onMenuPressed;
   final VoidCallback onSearchTap;
+  final VoidCallback? onRefresh; // Tambah parameter refresh
 
   const HomeHeader({
     super.key,
     this.username,
     required this.onMenuPressed,
     required this.onSearchTap,
-    // Parameter onFilterTap telah dihapus dari sini
+    this.onRefresh,
   });
 
   @override
@@ -72,10 +73,21 @@ class HomeHeader extends StatelessWidget {
                         ),
                       ],
                     ),
-                    IconButton(
-                      icon:
-                          const Icon(Icons.menu, color: Colors.white, size: 28),
-                      onPressed: onMenuPressed,
+                    Row(
+                      children: [
+                        if (onRefresh != null)
+                          IconButton(
+                            icon: const Icon(Icons.refresh,
+                                color: Colors.white, size: 28),
+                            onPressed: onRefresh,
+                            tooltip: 'Refresh Data',
+                          ),
+                        IconButton(
+                          icon: const Icon(Icons.menu,
+                              color: Colors.white, size: 28),
+                          onPressed: onMenuPressed,
+                        ),
+                      ],
                     ),
                   ],
                 ),
