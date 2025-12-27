@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/wisata_model.dart';
 import '../../providers/favorites_provider.dart';
+import '../../config/app_config.dart';
 import 'detail_wisata.dart';
 
 class AllItemsScreen extends StatefulWidget {
@@ -223,13 +224,22 @@ class _PlaceCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-                  child: Image.asset(
-                    place.gambarUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: Colors.grey[200],
-                      child: Icon(Icons.broken_image, color: Colors.grey[400]),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: place.gambarUrl.isNotEmpty
+                          ? DecorationImage(
+                              image: NetworkImage(AppConfig.getImageUrl(place.gambarUrl)),
+                              fit: BoxFit.cover,
+                              onError: (error, stackTrace) {
+                                print('❌ Image Error: $error');
+                              },
+                            )
+                          : null,
+                      color: place.gambarUrl.isEmpty ? Colors.grey[200] : null,
                     ),
+                    child: place.gambarUrl.isEmpty
+                        ? Icon(Icons.broken_image, color: Colors.grey[400])
+                        : null,
                   ),
                 ),
                 Padding(

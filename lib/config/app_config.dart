@@ -12,7 +12,7 @@ class AppConfig {
     if (Platform.isAndroid) {
       // Emulator Android
       // Gunakan ini jika pakai emulator
-      return 'http://10.0.2.2';
+      return 'http://10.0.2.2:8000';
 
       // HP fisik (jika tidak pakai emulator)
       // return 'http://192.168.100.20';
@@ -20,11 +20,33 @@ class AppConfig {
 
     // 🍎 iOS Simulator
     if (Platform.isIOS) {
-      return 'http://localhost';
+      return 'http://localhost:8000';
     }
 
     // Fallback
-    return 'http://localhost';
+    return 'http://localhost:8000';
+  }
+
+  // 🖼️ BASE URL untuk gambar (image assets)
+  static String imageBaseUrl() {
+    // 🌐 FLUTTER WEB
+    if (kIsWeb) {
+      return 'http://192.168.18.171/dashboard/public/images';
+    }
+
+    // 🤖 ANDROID (Emulator & Physical Device)
+    if (Platform.isAndroid) {
+      // Gunakan IP lokal untuk akses gambar
+      return 'http://192.168.18.171/dashboard/public/images';
+    }
+
+    // 🍎 iOS Simulator
+    if (Platform.isIOS) {
+      return 'http://192.168.18.171/dashboard/public/images';
+    }
+
+    // Fallback
+    return 'http://192.168.18.171/dashboard/public/images';
   }
 
   static String getImageUrl(String? relativePath) {
@@ -37,8 +59,9 @@ class AppConfig {
     final cleanPath =
         relativePath.startsWith('/') ? relativePath.substring(1) : relativePath;
 
-    final fullUrl = '${baseUrl()}/$cleanPath';
-    print('🧪 FINAL IMAGE URL = $fullUrl');
+    // Gunakan imageBaseUrl() untuk gambar, bukan baseUrl()
+    final fullUrl = '${imageBaseUrl()}/$cleanPath';
+    print('🖼️ IMAGE URL = $fullUrl');
     return fullUrl;
   }
 }

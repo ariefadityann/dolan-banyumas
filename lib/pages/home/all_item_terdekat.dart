@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/wisata_model.dart';
 import '../../providers/favorites_provider.dart';
+import '../../config/app_config.dart';
 import 'detail_wisata.dart';
 
 class AllItemTerdekat extends StatefulWidget {
@@ -227,15 +228,24 @@ class _AllItemTerdekatState extends State<AllItemTerdekat> {
                       topLeft: Radius.circular(16),
                       bottomLeft: Radius.circular(16),
                     ),
-                    child: SizedBox(
+                    child: Container(
                       height: screenHeight * 0.17,
-                      child: Image.asset(
-                        place.gambarUrl,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.broken_image, color: Colors.grey),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        image: place.gambarUrl.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(AppConfig.getImageUrl(place.gambarUrl)),
+                                fit: BoxFit.cover,
+                                onError: (error, stackTrace) {
+                                  print('❌ Image Error: $error');
+                                },
+                              )
+                            : null,
+                        color: place.gambarUrl.isEmpty ? Colors.grey[200] : null,
                       ),
+                      child: place.gambarUrl.isEmpty
+                          ? const Icon(Icons.broken_image, color: Colors.grey)
+                          : null,
                     ),
                   ),
                 ),
