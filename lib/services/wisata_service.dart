@@ -11,7 +11,7 @@ class WisataService {
       final url = Uri.parse('${AppConfig.baseUrl()}/api/dolanbanyumas/wisata-all');
       
       print('🔵 Fetching wisata data from: $url');
-      
+
       final response = await http.get(
         url,
         headers: {
@@ -21,13 +21,13 @@ class WisataService {
       );
 
       print('📡 Response Status: ${response.statusCode}');
-      
+
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        
+
         // Handle different response formats
         List<dynamic> jsonResponse;
-        
+
         // Check if response has 'data' wrapper
         if (responseData is Map && responseData.containsKey('data')) {
           jsonResponse = responseData['data'] as List;
@@ -36,7 +36,7 @@ class WisataService {
         } else {
           throw Exception('Unexpected response format');
         }
-        
+
         print('✅ Loaded ${jsonResponse.length} wisata items');
         print('📋 First item: ${jsonResponse.isNotEmpty ? jsonResponse[0] : "empty"}');
         print('📋 Last item: ${jsonResponse.isNotEmpty ? jsonResponse[jsonResponse.length - 1] : "empty"}');
@@ -51,7 +51,7 @@ class WisataService {
       throw Exception('Error fetching wisata data: $e');
     }
   }
-  
+
   /// Fetch wisata by ID (optional, jika backend support)
   Future<TempatWisata?> fetchWisataById(String id) async {
     try {
@@ -67,12 +67,12 @@ class WisataService {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        
+
         // Handle response with 'data' wrapper
         final data = responseData is Map && responseData.containsKey('data')
             ? responseData['data']
             : responseData;
-        
+
         return TempatWisata.fromJson(data);
       } else {
         print('❌ Error fetching wisata by ID: ${response.statusCode}');
@@ -83,7 +83,7 @@ class WisataService {
       return null;
     }
   }
-  
+
   /// Fetch wisata by kategori (optional)
   Future<List<TempatWisata>> fetchWisataByKategori(String kategori) async {
     try {
@@ -99,7 +99,7 @@ class WisataService {
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        
+
         List<dynamic> jsonResponse;
         if (responseData is Map && responseData.containsKey('data')) {
           jsonResponse = responseData['data'] as List;
@@ -108,7 +108,7 @@ class WisataService {
         } else {
           throw Exception('Unexpected response format');
         }
-        
+
         return jsonResponse.map((data) => TempatWisata.fromJson(data)).toList();
       } else {
         throw Exception('Failed to load wisata by kategori');

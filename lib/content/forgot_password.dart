@@ -39,7 +39,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       _isLoading = true;
     });
 
-    const String url = 'http://127.0.0.1:8000/api/dolanbanyumas/forgot-password';
+    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/forgot-password';
 
     try {
       final response = await http.post(
@@ -58,7 +58,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(data['message'] ?? 'Kode OTP telah dikirim ke email Anda'),
+              content: Text(
+                  data['message'] ?? 'Kode OTP telah dikirim ke email Anda'),
               backgroundColor: Colors.green,
             ),
           );
@@ -74,7 +75,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         }
       } else {
         final errorData = jsonDecode(response.body);
-        
+
         // Check if error is due to unverified email
         if (errorData['email_not_verified'] == true) {
           if (mounted) {
@@ -83,10 +84,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: const Text('Email Belum Diverifikasi'),
-                  content: Text(
-                    errorData['message'] ?? 
-                    'Email Anda belum diverifikasi. Silakan selesaikan proses registrasi terlebih dahulu.'
-                  ),
+                  content: Text(errorData['message'] ??
+                      'Email Anda belum diverifikasi. Silakan selesaikan proses registrasi terlebih dahulu.'),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
@@ -98,7 +97,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         Navigator.pop(context); // Back to login
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Silakan registrasi ulang atau cek email untuk kode OTP'),
+                            content: Text(
+                                'Silakan registrasi ulang atau cek email untuk kode OTP'),
                             duration: Duration(seconds: 4),
                           ),
                         );
@@ -106,7 +106,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFF44336),
                       ),
-                      child: const Text('Kembali', style: TextStyle(color: Colors.white)),
+                      child: const Text('Kembali',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 );
@@ -118,7 +119,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Gagal: ${errorData['message'] ?? 'Email tidak ditemukan'}'),
+                content: Text(
+                    'Gagal: ${errorData['message'] ?? 'Email tidak ditemukan'}'),
                 backgroundColor: Colors.red,
               ),
             );
@@ -166,7 +168,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     children: [
                       // Back button
                       IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                        icon: const Icon(Icons.arrow_back,
+                            color: Colors.white, size: 28),
                         onPressed: () => Navigator.pop(context),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
@@ -247,7 +250,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       style: const TextStyle(color: Colors.black87),
                       decoration: InputDecoration(
                         hintText: 'contoh@email.com',
-                        prefixIcon: Icon(Icons.email_outlined, color: Colors.grey.shade600),
+                        prefixIcon: Icon(Icons.email_outlined,
+                            color: Colors.grey.shade600),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -260,9 +264,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Color(0xFFF44336), width: 2),
+                          borderSide: const BorderSide(
+                              color: Color(0xFFF44336), width: 2),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -332,10 +338,12 @@ class VerifyForgotPasswordOTPPage extends StatefulWidget {
   const VerifyForgotPasswordOTPPage({super.key, required this.email});
 
   @override
-  State<VerifyForgotPasswordOTPPage> createState() => _VerifyForgotPasswordOTPPageState();
+  State<VerifyForgotPasswordOTPPage> createState() =>
+      _VerifyForgotPasswordOTPPageState();
 }
 
-class _VerifyForgotPasswordOTPPageState extends State<VerifyForgotPasswordOTPPage> {
+class _VerifyForgotPasswordOTPPageState
+    extends State<VerifyForgotPasswordOTPPage> {
   bool _isLoading = false;
   bool _isResending = false;
 
@@ -379,7 +387,8 @@ class _VerifyForgotPasswordOTPPageState extends State<VerifyForgotPasswordOTPPag
       _isLoading = true;
     });
 
-    const String url = 'http://127.0.0.1:8000/api/dolanbanyumas/verify-forgot-password-otp';
+    const String url =
+        'http://10.0.2.2:8000/api/dolanbanyumas/verify-forgot-password-otp';
 
     try {
       final response = await http.post(
@@ -413,7 +422,8 @@ class _VerifyForgotPasswordOTPPageState extends State<VerifyForgotPasswordOTPPag
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Gagal: ${errorData['message'] ?? 'Kode OTP tidak valid'}'),
+              content: Text(
+                  'Gagal: ${errorData['message'] ?? 'Kode OTP tidak valid'}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -439,7 +449,7 @@ class _VerifyForgotPasswordOTPPageState extends State<VerifyForgotPasswordOTPPag
       _isResending = true;
     });
 
-    const String url = 'http://127.0.0.1:8000/api/dolanbanyumas/forgot-password';
+    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/forgot-password';
 
     try {
       final response = await http.post(
@@ -467,7 +477,8 @@ class _VerifyForgotPasswordOTPPageState extends State<VerifyForgotPasswordOTPPag
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Gagal: ${errorData['message'] ?? 'Tidak dapat mengirim ulang OTP'}'),
+              content: Text(
+                  'Gagal: ${errorData['message'] ?? 'Tidak dapat mengirim ulang OTP'}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -589,7 +600,8 @@ class _VerifyForgotPasswordOTPPageState extends State<VerifyForgotPasswordOTPPag
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFF44336), width: 2),
+                        borderSide: const BorderSide(
+                            color: Color(0xFFF44336), width: 2),
                       ),
                     ),
                     onChanged: (value) {
@@ -700,7 +712,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   bool _isLoading = false;
 
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -710,7 +723,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   Future<void> _resetPassword() async {
-    if (_passwordController.text.isEmpty || _confirmPasswordController.text.isEmpty) {
+    if (_passwordController.text.isEmpty ||
+        _confirmPasswordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Mohon lengkapi semua field')),
       );
@@ -735,7 +749,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       _isLoading = true;
     });
 
-    const String url = 'http://127.0.0.1:8000/api/dolanbanyumas/reset-password';
+    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/reset-password';
 
     try {
       final response = await http.post(
@@ -769,7 +783,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Gagal: ${errorData['message'] ?? 'Terjadi kesalahan'}'),
+              content:
+                  Text('Gagal: ${errorData['message'] ?? 'Terjadi kesalahan'}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -829,7 +844,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Color(0xFFF44336), width: 2),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             suffixIcon: IconButton(
               icon: Icon(
                 isPasswordVisible ? Icons.visibility : Icons.visibility_off,
@@ -869,7 +885,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     children: [
                       // Back button
                       IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                        icon: const Icon(Icons.arrow_back,
+                            color: Colors.white, size: 28),
                         onPressed: () => Navigator.pop(context),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
@@ -951,7 +968,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       controller: _confirmPasswordController,
                       onToggleVisibility: () {
                         setState(() {
-                          _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                          _isConfirmPasswordVisible =
+                              !_isConfirmPasswordVisible;
                         });
                       },
                     ),
