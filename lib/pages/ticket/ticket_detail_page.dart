@@ -22,7 +22,7 @@ class TicketDetailPage extends StatelessWidget {
   static const _whiteColor = Colors.white;
 
   // Ganti URL ini jika perlu. '10.0.2.2' untuk emulator Android
-  static const String _baseUrl = 'http://10.0.2.2:8000/api/dolanbanyumas';
+  static const String _baseUrl = 'https://desa-sebet-kediri.site/api/dolanbanyumas';
 
   @override
   Widget build(BuildContext context) {

@@ -66,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
       _isLoading = true;
     });
 
-    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/register';
+    const String url = 'https://desa-sebet-kediri.site/api/dolanbanyumas/register';
 
     try {
       final response = await http.post(

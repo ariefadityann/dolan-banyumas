@@ -71,7 +71,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     setState(() => _isLoading = true);
 
     const String apiUrl =
-        'https://unentwined-lupe-superornamentally.ngrok-free.dev/api/dolanbanyumas/midtrans/transaction';
+        'https://desa-sebet-kediri.site/api/dolanbanyumas/midtrans/transaction';
 
     try {
       final Map<String, dynamic> requestBody = {

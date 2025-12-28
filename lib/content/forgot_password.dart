@@ -39,7 +39,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       _isLoading = true;
     });
 
-    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/forgot-password';
+    const String url = 'https://desa-sebet-kediri.site/api/dolanbanyumas/forgot-password';
 
     try {
       final response = await http.post(
@@ -388,7 +388,7 @@ class _VerifyForgotPasswordOTPPageState
     });
 
     const String url =
-        'http://10.0.2.2:8000/api/dolanbanyumas/verify-forgot-password-otp';
+        'https://desa-sebet-kediri.site/api/dolanbanyumas/verify-forgot-password-otp';
 
     try {
       final response = await http.post(
@@ -449,7 +449,8 @@ class _VerifyForgotPasswordOTPPageState
       _isResending = true;
     });
 
-    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/forgot-password';
+    const String url =
+        'https://desa-sebet-kediri.site/api/dolanbanyumas/forgot-password';
 
     try {
       final response = await http.post(
@@ -749,7 +750,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       _isLoading = true;
     });
 
-    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/reset-password';
+    const String url =
+        'https://desa-sebet-kediri.site/api/dolanbanyumas/reset-password';
 
     try {
       final response = await http.post(
