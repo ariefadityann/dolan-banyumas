@@ -37,6 +37,16 @@ class TempatWisata {
 
   // METHOD PENTING #1: Untuk mengubah data dari server/JSON menjadi Object
   factory TempatWisata.fromJson(Map<String, dynamic> json) {
+    // Helper function to parse lat/lng that might come as String or num
+    double parseCoordinate(dynamic value) {
+      if (value == null) return 0.0;
+      if (value is num) return value.toDouble();
+      if (value is String) {
+        return double.tryParse(value) ?? 0.0;
+      }
+      return 0.0;
+    }
+
     return TempatWisata(
       nama: json['nama'] ?? '',
       kategori: json['kategori'] ?? '',
@@ -50,8 +60,8 @@ class TempatWisata {
       alamat: json['alamat'] ?? '',
       telepon: json['telepon'] ?? '',
       jamBuka: json['jamBuka'] ?? json['jam_buka'] ?? '',
-      lat: (json['lat'] as num?)?.toDouble() ?? 0.0,
-      lng: (json['lng'] as num?)?.toDouble() ?? 0.0,
+      lat: parseCoordinate(json['lat']),
+      lng: parseCoordinate(json['lng']),
     );
   }
 

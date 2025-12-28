@@ -22,7 +22,7 @@ class _RiwayatTiketListState extends State<RiwayatTiketList> {
   String _errorMessage = '';
 
   // Ganti '10.0.2.2' dengan IP server/laptop Anda jika pakai HP fisik
-  final String _baseUrl = 'http://10.0.2.2:8000/api/dolanbanyumas/midtrans';
+  final String _baseUrl = 'https://desa-sebet-kediri.site/api/dolanbanyumas/midtrans';
 
   @override
   void initState() {

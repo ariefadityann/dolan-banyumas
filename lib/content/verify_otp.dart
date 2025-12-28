@@ -58,7 +58,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
       _isLoading = true;
     });
 
-    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/verify-email';
+    const String url = 'https://desa-sebet-kediri.site/api/dolanbanyumas/verify-email';
 
     try {
       // Debug: Print request data
@@ -169,7 +169,7 @@ class _VerifyOTPPageState extends State<VerifyOTPPage> {
       _isResending = true;
     });
 
-    const String url = 'http://10.0.2.2:8000/api/dolanbanyumas/resend-otp';
+    const String url = 'https://desa-sebet-kediri.site/api/dolanbanyumas/resend-otp';
 
     try {
       final response = await http.post(

@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
     // Ganti URL ini dengan IP Address komputer Anda jika menggunakan Emulator (misal: 10.0.2.2 untuk Android Emulator)
     // atau IP LAN jika menggunakan HP fisik (misal: 192.168.1.x)
-    const String url = 'http://192.168.100.20:8000/api/dolanbanyumas/login';
+    const String url = 'https://desa-sebet-kediri.site/api/dolanbanyumas/login';
 
     try {
       final response = await http.post(

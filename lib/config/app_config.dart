@@ -3,50 +3,14 @@ import 'dart:io';
 
 class AppConfig {
   static String baseUrl() {
-    // 🌐 FLUTTER WEB
-    if (kIsWeb) {
-      return 'http://app-dolan-banyumas.test';
-    }
-
-    // 🤖 ANDROID
-    if (Platform.isAndroid) {
-      // Emulator Android
-      // Gunakan ini jika pakai emulator
-      return 'http://10.0.2.2:8000';
-
-      // HP fisik (jika tidak pakai emulator)
-      // return 'http://192.168.100.20';
-    }
-
-    // 🍎 iOS Simulator
-    if (Platform.isIOS) {
-      return 'http://localhost:8000';
-    }
-
-    // Fallback
-    return 'http://localhost:8000';
+    // 🌐 Production API URL - digunakan untuk semua platform
+    return 'https://desa-sebet-kediri.site';
   }
 
   // 🖼️ BASE URL untuk gambar (image assets)
   static String imageBaseUrl() {
-    // 🌐 FLUTTER WEB
-    if (kIsWeb) {
-      return 'http://192.168.18.171/dashboard/public/images';
-    }
-
-    // 🤖 ANDROID (Emulator & Physical Device)
-    if (Platform.isAndroid) {
-      // Gunakan IP lokal untuk akses gambar
-      return 'http://192.168.18.171/dashboard/public/images';
-    }
-
-    // 🍎 iOS Simulator
-    if (Platform.isIOS) {
-      return 'http://192.168.18.171/dashboard/public/images';
-    }
-
-    // Fallback
-    return 'http://192.168.18.171/dashboard/public/images';
+    // 🌐 Production Image URL - digunakan untuk semua platform
+    return 'https://desa-sebet-kediri.site';
   }
 
   static String getImageUrl(String? relativePath) {
