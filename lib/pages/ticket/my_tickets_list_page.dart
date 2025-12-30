@@ -22,7 +22,7 @@ class _MyTicketsListPageState extends State<MyTicketsListPage> {
   String _errorMessage = '';
 
   // Ganti '10.0.2.2' dengan IP server/laptop Anda jika pakai HP fisik
-  final String _baseUrl = 'http://10.0.2.2:8000/api/dolanbanyumas/midtrans';
+  final String _baseUrl = 'https://desa-sebet-kediri.site/api/dolanbanyumas/midtrans';
 
   @override
   void initState() {
@@ -183,11 +183,20 @@ class _MyTicketsListPageState extends State<MyTicketsListPage> {
         ? "https://app.sandbox.midtrans.com/snap/v2/vtweb/$snapToken"
         : null;
     
+    // Helper function to safely parse int from dynamic value
+    int parseIntSafely(dynamic value, {int defaultValue = 0}) {
+      if (value == null) return defaultValue;
+      if (value is int) return value;
+      if (value is String) return int.tryParse(value) ?? defaultValue;
+      if (value is double) return value.toInt();
+      return defaultValue;
+    }
+    
     return PurchasedTicket(
       locationName: item['wisata_name'] ?? 'Wisata',
       category: 'Nama Wisata',
       visitDate: _formatSimpleDate(item['visit_date']),
-      quantity: item['total_tickets'] ?? 0,
+      quantity: parseIntSafely(item['total_tickets']), // Safe parsing
       imageUrl: 'assets/img/alunalun.jpg', // Gambar statis
       userName: item['user_name'] ?? 'Pengguna',
       orderDate: orderDateOnly,
@@ -209,11 +218,20 @@ class _MyTicketsListPageState extends State<MyTicketsListPage> {
       category = category.split(':').last.trim();
     }
 
+    // Helper function to safely parse int from dynamic value
+    int parseIntSafely(dynamic value, {int defaultValue = 0}) {
+      if (value == null) return defaultValue;
+      if (value is int) return value;
+      if (value is String) return int.tryParse(value) ?? defaultValue;
+      if (value is double) return value.toInt();
+      return defaultValue;
+    }
+
     return PurchasedTicket(
       locationName: category,
       category: 'Tiket Parkir',
       visitDate: _formatSimpleDate(item['tanggal_booking']),
-      quantity: item['jumlah'] ?? 0,
+      quantity: parseIntSafely(item['jumlah']), // Safe parsing
       imageUrl: 'assets/img/alunalun.jpg', // Gambar statis
       userName: item['nama_lengkap'] ?? 'Pengguna',
       orderDate: orderDateOnly,

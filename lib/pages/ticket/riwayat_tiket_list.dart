@@ -69,6 +69,7 @@ class _RiwayatTiketListState extends State<RiwayatTiketList> {
       ]);
 
       final List<Map<String, dynamic>> allItems = [];
+      String warningMessage = '';
 
       // --- Proses data Tiket Wisata (transactions) ---
       if (responses[0].statusCode == 200) {
@@ -77,12 +78,14 @@ class _RiwayatTiketListState extends State<RiwayatTiketList> {
           final data = body['data'] as List;
           allItems.addAll(data.map((item) => (item as Map<String, dynamic>)..['type'] = 'transaction'));
         } else {
-          throw Exception(body['message'] ?? 'Gagal memuat riwayat tiket');
+          warningMessage += 'Gagal memuat riwayat tiket. ';
+          print('⚠️ Tiket Error: ${body['message']}');
         }
       } else if (responses[0].statusCode == 401) {
         throw Exception('Sesi habis. Silakan login ulang.');
       } else {
-        throw Exception('Error Tiket: ${responses[0].statusCode}');
+        warningMessage += 'Error memuat tiket wisata (${responses[0].statusCode}). ';
+        print('❌ Tiket Error: ${responses[0].statusCode} - ${responses[0].body}');
       }
 
       // --- Proses data Parkir (booking-parkir) ---
@@ -92,12 +95,55 @@ class _RiwayatTiketListState extends State<RiwayatTiketList> {
           final data = body['data'] as List;
           allItems.addAll(data.map((item) => (item as Map<String, dynamic>)..['type'] = 'parkir'));
         } else {
-          throw Exception(body['message'] ?? 'Gagal memuat riwayat parkir');
+          warningMessage += 'Gagal memuat riwayat parkir. ';
+          print('⚠️ Parkir Error: ${body['message']}');
         }
       } else if (responses[1].statusCode == 401) {
         throw Exception('Sesi habis. Silakan login ulang.');
+      } else if (responses[1].statusCode == 500) {
+        // Handle 500 error specifically for parking
+        warningMessage += 'Server parkir sedang bermasalah (Error 500). ';
+        
+        // Try to parse error message from backend
+        try {
+          final errorBody = json.decode(responses[1].body);
+          print('❌ PARKIR ERROR 500 DETAILS:');
+          print('   Status Code: 500');
+          print('   Error Message: ${errorBody['message'] ?? 'No message'}');
+          print('   Full Response: ${responses[1].body}');
+          
+          // Show detailed error to user
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error Parkir: ${errorBody['message'] ?? 'Server error'}'),
+                backgroundColor: Colors.orange,
+                duration: const Duration(seconds: 5),
+              ),
+            );
+          }
+        } catch (e) {
+          print('❌ PARKIR ERROR 500 (Cannot parse response):');
+          print('   Raw Response: ${responses[1].body}');
+          
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Riwayat parkir tidak dapat dimuat. Server sedang bermasalah.'),
+                backgroundColor: Colors.orange,
+                duration: Duration(seconds: 4),
+              ),
+            );
+          }
+        }
       } else {
-        throw Exception('Error Parkir: ${responses[1].statusCode}');
+        warningMessage += 'Error memuat parkir (${responses[1].statusCode}). ';
+        print('❌ Parkir Error: ${responses[1].statusCode} - ${responses[1].body}');
+      }
+
+      // Show warning if there were any non-critical errors
+      if (warningMessage.isNotEmpty && mounted) {
+        print('⚠️ Warning: $warningMessage');
       }
       
       // --- PERBAIKAN LOGIKA FILTER ---
@@ -187,11 +233,20 @@ class _RiwayatTiketListState extends State<RiwayatTiketList> {
         ? "https://app.sandbox.midtrans.com/snap/v2/vtweb/$snapToken"
         : null;
     
+    // Helper function to safely parse int from dynamic value
+    int parseIntSafely(dynamic value, {int defaultValue = 0}) {
+      if (value == null) return defaultValue;
+      if (value is int) return value;
+      if (value is String) return int.tryParse(value) ?? defaultValue;
+      if (value is double) return value.toInt();
+      return defaultValue;
+    }
+    
     return PurchasedTicket(
       locationName: item['wisata_name'] ?? 'Wisata',
       category: 'Nama Wisata',
       visitDate: _formatSimpleDate(item['visit_date']),
-      quantity: item['total_tickets'] ?? 0,
+      quantity: parseIntSafely(item['total_tickets']), // Safe parsing
       imageUrl: 'assets/img/alunalun.jpg', // Gambar statis
       userName: item['user_name'] ?? 'Pengguna',
       orderDate: orderDateOnly,
@@ -213,11 +268,20 @@ class _RiwayatTiketListState extends State<RiwayatTiketList> {
       category = category.split(':').last.trim();
     }
 
+    // Helper function to safely parse int from dynamic value
+    int parseIntSafely(dynamic value, {int defaultValue = 0}) {
+      if (value == null) return defaultValue;
+      if (value is int) return value;
+      if (value is String) return int.tryParse(value) ?? defaultValue;
+      if (value is double) return value.toInt();
+      return defaultValue;
+    }
+
     return PurchasedTicket(
       locationName: category,
       category: 'Tiket Parkir',
       visitDate: _formatSimpleDate(item['tanggal_booking']),
-      quantity: item['jumlah'] ?? 0,
+      quantity: parseIntSafely(item['jumlah']), // Safe parsing
       imageUrl: 'assets/img/alunalun.jpg', // Gambar statis
       userName: item['nama_lengkap'] ?? 'Pengguna',
       orderDate: orderDateOnly,
