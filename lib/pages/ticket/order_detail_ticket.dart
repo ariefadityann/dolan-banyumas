@@ -1,5 +1,7 @@
 import 'dart:convert'; // <-- Diperlukan untuk jsonEncode/Decode
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'; // <-- Untuk kIsWeb
+import 'package:url_launcher/url_launcher.dart'; // <-- Untuk membuka URL di web
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // <-- Diperlukan untuk email
 import 'package:http/http.dart' as http; // <-- Diperlukan untuk API
@@ -32,6 +34,7 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
   bool _isAgreed = false;
   bool _isLoading = false;
   String _emailPemesanAktif = 'pengunjung@dolanbanyumas.com'; // Default email
+  String _usernamePemesanAktif = 'pengunjung'; // Default username
 
   // Constants for colors
   static const _backgroundColor = Color(0xFFF9F6F0);
@@ -48,10 +51,16 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     final String? savedEmail = prefs.getString('user_email');
+    final String? savedUsername = prefs.getString('user_name');
 
-    if (mounted && savedEmail != null) {
+    if (mounted) {
       setState(() {
-        _emailPemesanAktif = savedEmail;
+        if (savedEmail != null) {
+          _emailPemesanAktif = savedEmail;
+        }
+        if (savedUsername != null) {
+          _usernamePemesanAktif = savedUsername;
+        }
       });
     }
   }
@@ -401,6 +410,7 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
         // Key untuk mencari user_id (diasumsikan backend menangani ini)
         'first_name': widget.namaPemesan,
         'email': _emailPemesanAktif,
+        'username': _usernamePemesanAktif, // Field yang diperlukan oleh backend
 
         // Key yang disamakan dengan nama kolom tabel 'parkir_bookings'
         'total_harga': widget.totalTarif, // BUKAN 'gross_amount'
@@ -429,7 +439,30 @@ class _KonfirmasiBookingPageState extends State<KonfirmasiBookingPage> {
         if (data['status'] == 'success') {
           final String redirectUrl = data['redirect_url'];
 
-          // Navigasi ke WebView
+          // --------------------------
+          // PLATFORM CHECKING
+          // --------------------------
+
+          if (kIsWeb) {
+            // WEB → buka tab baru
+            final Uri url = Uri.parse(redirectUrl);
+            await launchUrl(url, mode: LaunchMode.externalApplication);
+            
+            if (!mounted) return;
+            
+            // Kembali ke halaman sebelumnya karena pembayaran dibuka di tab baru
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Halaman pembayaran dibuka di tab baru. Silakan selesaikan pembayaran Anda."),
+                backgroundColor: Colors.blue,
+                duration: Duration(seconds: 4),
+              ),
+            );
+            return;
+          }
+
+          // ANDROID → buka WebView
           final result = await Navigator.push(
             context,
             MaterialPageRoute(
